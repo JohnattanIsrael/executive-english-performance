@@ -7,6 +7,8 @@ import { ctas } from "@/config/site";
 import { audiences, executiveOutcomes, pressureSituations, preparationMoments } from "@/content/marketing";
 import { services } from "@/lib/services";
 import { pageMetadata, serviceJsonLd } from "@/lib/seo";
+import { PhotoFrame } from "@/components/ui/photo";
+import { photos } from "@/content/photos";
 
 const description =
   "Private executive English coaching for CEOs, founders, directors and senior professionals who need to communicate with precision and confidence in high-stakes meetings, presentations and negotiations.";
@@ -28,6 +30,7 @@ export default async function ExecutivesPage() {
       <JsonLd data={serviceJsonLd("Executive English coaching", description, "/executives")} />
       <PageHero
         eyebrow="For executives & senior professionals"
+        aside={<PhotoFrame photo={photos.presentingLeadership} sizes="(min-width: 1024px) 560px, 100vw" priority />}
         title="Communicate with the precision your role demands."
         lead={
           <p>

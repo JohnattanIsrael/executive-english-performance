@@ -1,7 +1,9 @@
 import { Suspense } from "react";
 import { ExecutiveAssessmentForm } from "@/components/forms/executive-assessment-form";
 import { PageHero } from "@/components/marketing/sections";
+import { PhotoFrame } from "@/components/ui/photo";
 import { Container, Section } from "@/components/ui/primitives";
+import { photos } from "@/content/photos";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
@@ -33,6 +35,7 @@ export default function BookPage() {
             </Suspense>
           </div>
           <aside className="lg:sticky lg:top-28 lg:self-start">
+            <PhotoFrame photo={photos.notebookPens} sizes="(min-width: 1024px) 400px, 100vw" aspect="aspect-[16/10]" className="mb-10" />
             <p className="eyebrow">What happens next</p>
             <ol className="mt-6 flex flex-col gap-7">
               {steps.map((s, i) => (

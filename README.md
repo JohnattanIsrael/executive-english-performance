@@ -100,6 +100,16 @@ Events (typed in `src/lib/analytics/events.ts`): `landing_page_view`, `pricing_v
 `simulation_started`, `simulation_completed`.
 Choose a provider with `NEXT_PUBLIC_ANALYTICS_PROVIDER` = `none | console | ga4 | plausible | posthog`.
 
+## Photography
+
+13 photos from [Unsplash](https://unsplash.com), each checked to be free under the
+[Unsplash License](https://unsplash.com/license) (no Unsplash+ images), self-hosted as
+pre-sized WebP in `public/images/photos/` and registered in `src/content/photos.ts`
+(alt text, photographer, source). Render them with `<Photo>` / `<PhotoFrame>` from
+`src/components/ui/photo.tsx`; credits are listed on `/credits`. People pictured are
+illustrative — never present them as clients, coaches or the founder. The founder
+portrait remains a placeholder until real photography is supplied.
+
 ## Before launch — replace placeholders
 
 The `/admin/content` page lists everything. In short:

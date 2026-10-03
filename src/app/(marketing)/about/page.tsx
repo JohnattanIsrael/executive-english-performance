@@ -3,6 +3,8 @@ import { Badge, Container, PlaceholderNote, Section, SectionHeading } from "@/co
 import { founder, methodologyPrinciples } from "@/content/founder";
 import { pageMetadata } from "@/lib/seo";
 import { asset } from "@/lib/utils";
+import { PhotoFrame } from "@/components/ui/photo";
+import { photos } from "@/content/photos";
 
 export const metadata = pageMetadata({
   title: "About",
@@ -16,6 +18,7 @@ export default function AboutPage() {
     <>
       <PageHero
         eyebrow="About"
+        aside={<PhotoFrame photo={photos.glassClouds} sizes="(min-width: 1024px) 560px, 100vw" priority />}
         title="Experience matters when communication has consequences."
         lead={
           <p>

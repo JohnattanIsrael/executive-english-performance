@@ -2,9 +2,11 @@ import { CircleDashed, CheckCircle2 } from "lucide-react";
 import { EarlyAccessForm } from "@/components/forms/simple-forms";
 import { AiPracticeSection, CtaBand, HumanAiSection, PageHero } from "@/components/marketing/sections";
 import { ButtonLink } from "@/components/ui/button";
+import { PhotoFrame } from "@/components/ui/photo";
 import { Badge, Container, Section, SectionHeading } from "@/components/ui/primitives";
 import { ctas } from "@/config/site";
 import { categoryLabels } from "@/content/marketing";
+import { photos } from "@/content/photos";
 import { services } from "@/lib/services";
 import { pageMetadata } from "@/lib/seo";
 
@@ -53,24 +55,27 @@ export default async function AiCoachPage() {
           </p>
         }
         aside={
-          <div className="rounded-2xl border border-line bg-surface p-7">
-            <Badge tone="brass">Development status</Badge>
-            <ul className="mt-5 flex flex-col gap-3">
-              {status.map((s) => (
-                <li key={s.label} className="flex items-center justify-between gap-4 text-[15px]">
-                  <span className="text-ink">{s.label}</span>
-                  {s.live ? (
-                    <span className="flex items-center gap-1.5 text-sm text-good">
-                      <CheckCircle2 className="size-4" aria-hidden /> Available
-                    </span>
-                  ) : (
-                    <span className="flex items-center gap-1.5 text-sm text-muted">
-                      <CircleDashed className="size-4" aria-hidden /> In development
-                    </span>
-                  )}
-                </li>
-              ))}
-            </ul>
+          <div>
+            <PhotoFrame photo={photos.studioMicrophone} sizes="(min-width: 1024px) 560px, 100vw" aspect="aspect-[16/9]" priority />
+            <div className="relative mx-4 -mt-16 rounded-2xl border border-line bg-surface p-7 shadow-[0_24px_60px_-30px_rgb(14_23_38/0.35)] sm:mx-8">
+              <Badge tone="brass">Development status</Badge>
+              <ul className="mt-5 flex flex-col gap-3">
+                {status.map((s) => (
+                  <li key={s.label} className="flex items-center justify-between gap-4 text-[15px]">
+                    <span className="text-ink">{s.label}</span>
+                    {s.live ? (
+                      <span className="flex shrink-0 items-center gap-1.5 text-sm whitespace-nowrap text-good">
+                        <CheckCircle2 className="size-4" aria-hidden /> Available
+                      </span>
+                    ) : (
+                      <span className="flex shrink-0 items-center gap-1.5 text-sm whitespace-nowrap text-muted">
+                        <CircleDashed className="size-4" aria-hidden /> In development
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         }
       >

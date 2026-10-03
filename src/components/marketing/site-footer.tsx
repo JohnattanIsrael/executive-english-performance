@@ -44,6 +44,9 @@ export function SiteFooter() {
             <Link href="/privacy" className="hover:text-paper">
               Privacy
             </Link>
+            <Link href="/credits" className="hover:text-paper">
+              Photo credits
+            </Link>
             <Link href={ctas.proposal.href} className="hover:text-paper">
               Corporate proposals
             </Link>

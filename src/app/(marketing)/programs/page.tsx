@@ -8,6 +8,8 @@ import { services } from "@/lib/services";
 import type { Program } from "@/lib/types";
 import { pageMetadata } from "@/lib/seo";
 import { formatPrice } from "@/lib/utils";
+import { PhotoFrame } from "@/components/ui/photo";
+import { photos } from "@/content/photos";
 
 export const metadata = pageMetadata({
   title: "Executive English Programs",
@@ -83,6 +85,7 @@ export default async function ProgramsPage() {
     <>
       <PageHero
         eyebrow="Programs"
+        aside={<PhotoFrame photo={photos.handshake} sizes="(min-width: 1024px) 560px, 100vw" priority />}
         title="Programs built around communication performance."
         lead={
           <p>

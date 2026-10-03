@@ -1,6 +1,8 @@
 import { MessageSquareQuote, Play } from "lucide-react";
 import { Meter } from "@/components/ui/charts";
+import { Photo } from "@/components/ui/photo";
 import { Badge } from "@/components/ui/primitives";
+import { photos } from "@/content/photos";
 
 /**
  * Product preview composed in HTML. Values are illustrative interface
@@ -8,10 +10,13 @@ import { Badge } from "@/components/ui/primitives";
  */
 export function HeroVisual() {
   return (
-    <div className="relative mx-auto w-full max-w-[560px] animate-rise [animation-delay:150ms]">
-      <div aria-hidden className="absolute -inset-6 -z-10 rounded-[2rem] hairline-grid opacity-70 [mask-image:radial-gradient(closest-side,black,transparent)]" />
+    <div className="relative mx-auto w-full max-w-[600px] animate-rise pt-10 [animation-delay:150ms] sm:pt-16">
+      <div className="absolute top-0 right-0 bottom-16 w-[68%] overflow-hidden rounded-[1.25rem] sm:w-[60%]">
+        <Photo photo={photos.glassFacade} sizes="(min-width: 1024px) 360px, 60vw" priority />
+        <div aria-hidden className="absolute inset-0 bg-gradient-to-br from-ink/10 via-transparent to-ink/40" />
+      </div>
 
-      <figure className="rounded-2xl border border-line bg-surface p-5 shadow-[0_30px_80px_-30px_rgb(14_23_38/0.25)] sm:p-6">
+      <figure className="relative mr-6 rounded-2xl border border-line bg-surface p-5 shadow-[0_30px_80px_-30px_rgb(14_23_38/0.35)] sm:mr-16 sm:p-6">
         <figcaption className="flex items-center justify-between gap-3">
           <div>
             <p className="text-xs text-muted">Communication profile</p>

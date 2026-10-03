@@ -1,7 +1,9 @@
 import { ArrowRight, Check, Minus } from "lucide-react";
 import type { ReactNode } from "react";
 import { ButtonLink } from "@/components/ui/button";
+import { Photo } from "@/components/ui/photo";
 import { Badge, Container, Section, SectionHeading } from "@/components/ui/primitives";
+import type { Photo as PhotoData } from "@/content/photos";
 import { ctas } from "@/config/site";
 import {
   comparison,
@@ -36,11 +38,18 @@ export function PageHero({
       <Container className={cn("relative py-16 md:py-24", aside && "grid items-center gap-12 lg:grid-cols-[1.1fr_1fr]")}>
         <div className="max-w-3xl animate-rise">
           <p className="eyebrow mb-5">{eyebrow}</p>
-          <h1 className="display text-[2.5rem] leading-[1.04] text-ink sm:text-6xl md:text-[4.2rem]">{title}</h1>
+          <h1
+            className={cn(
+              "display text-[2.5rem] leading-[1.04] text-ink sm:text-6xl",
+              aside ? "lg:text-[3.4rem] xl:text-[3.8rem]" : "md:text-[4.2rem]",
+            )}
+          >
+            {title}
+          </h1>
           {lead && <div className="prose-lead mt-7 max-w-2xl">{lead}</div>}
           {children && <div className="mt-9 flex flex-wrap gap-3">{children}</div>}
         </div>
-        {aside}
+        {aside && <div className="animate-rise [animation-delay:120ms]">{aside}</div>}
       </Container>
     </section>
   );
@@ -315,6 +324,37 @@ export function AiPracticeSection({ showCta = true }: { showCta?: boolean }) {
 }
 
 /* ----------------------------------------------------------------------------
+ * Full-bleed photo band
+ * ------------------------------------------------------------------------- */
+export function PhotoBand({
+  photo,
+  eyebrow,
+  title,
+  body,
+}: {
+  photo: PhotoData;
+  eyebrow: string;
+  title: string;
+  body: string;
+}) {
+  return (
+    <section className="relative isolate overflow-hidden bg-ink text-paper">
+      <div className="absolute inset-0 -z-10">
+        <Photo photo={photo} sizes="100vw" decorative />
+        <div aria-hidden className="absolute inset-0 bg-gradient-to-r from-ink/95 via-ink/75 to-ink/30" />
+      </div>
+      <Container className="flex min-h-[440px] items-center py-20 md:min-h-[520px]">
+        <div className="max-w-2xl">
+          <p className="eyebrow text-brass-light">{eyebrow}</p>
+          <h2 className="display mt-5 text-4xl leading-[1.08] text-paper md:text-[3.4rem]">{title}</h2>
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-paper/75">{body}</p>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+/* ----------------------------------------------------------------------------
  * Closing call to action
  * ------------------------------------------------------------------------- */
 export function CtaBand({
@@ -323,19 +363,28 @@ export function CtaBand({
   primary = "assessment",
   secondary = "proposal",
   location,
+  photo,
 }: {
   title?: string;
   lead?: string;
   primary?: "assessment" | "proposal";
   secondary?: "assessment" | "proposal" | "earlyAccess" | "none";
   location: string;
+  /** Optional atmospheric background photo under an ink overlay. */
+  photo?: PhotoData;
 }) {
   const first = ctas[primary];
   const second = secondary === "none" ? null : ctas[secondary];
   return (
     <section className="bg-paper py-20 md:py-24">
       <Container>
-        <div className="relative overflow-hidden rounded-3xl bg-ink px-7 py-14 text-paper md:px-14 md:py-20">
+        <div className="relative isolate overflow-hidden rounded-3xl bg-ink px-7 py-14 text-paper md:px-14 md:py-20">
+          {photo && (
+            <div className="absolute inset-0 -z-10">
+              <Photo photo={photo} sizes="(min-width: 1280px) 1200px, 100vw" decorative />
+              <div aria-hidden className="absolute inset-0 bg-gradient-to-r from-ink via-ink/85 to-ink/40" />
+            </div>
+          )}
           <div aria-hidden className="absolute inset-0 hairline-grid-inverse [mask-image:radial-gradient(ellipse_at_top_right,black,transparent_70%)]" />
           <div className="relative grid items-end gap-10 lg:grid-cols-[1.4fr_1fr]">
             <div>

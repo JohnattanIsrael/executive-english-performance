@@ -4,6 +4,8 @@ import { Container, Section, SectionHeading } from "@/components/ui/primitives";
 import { ctas } from "@/config/site";
 import { processSteps } from "@/content/marketing";
 import { pageMetadata } from "@/lib/seo";
+import { PhotoFrame } from "@/components/ui/photo";
+import { photos } from "@/content/photos";
 
 export const metadata = pageMetadata({
   title: "How It Works",
@@ -47,6 +49,7 @@ export default function HowItWorksPage() {
     <>
       <PageHero
         eyebrow="How it works"
+        aside={<PhotoFrame photo={photos.penNotebook} sizes="(min-width: 1024px) 560px, 100vw" priority />}
         title="A method built around performance, not hours."
         lead={
           <p>

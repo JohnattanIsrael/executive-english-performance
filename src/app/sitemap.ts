@@ -19,6 +19,7 @@ const routes: { path: string; priority: number; changeFrequency: "weekly" | "mon
   { path: "/faq", priority: 0.6, changeFrequency: "monthly" },
   { path: "/contact", priority: 0.5, changeFrequency: "yearly" },
   { path: "/privacy", priority: 0.2, changeFrequency: "yearly" },
+  { path: "/credits", priority: 0.1, changeFrequency: "yearly" },
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

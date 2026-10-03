@@ -10,10 +10,13 @@ import {
   ComparisonSection,
   CtaBand,
   HumanAiSection,
+  PhotoBand,
   ProblemSection,
   ProcessSection,
 } from "@/components/marketing/sections";
 import { ButtonLink } from "@/components/ui/button";
+import { PhotoFrame } from "@/components/ui/photo";
+import { photos } from "@/content/photos";
 import { Container, JsonLd, PlaceholderNote, Section, SectionHeading } from "@/components/ui/primitives";
 import { ctas, site } from "@/config/site";
 import { faqs } from "@/content/faq";
@@ -85,6 +88,12 @@ export default async function HomePage() {
 
       <ProblemSection />
       <ComparisonSection />
+      <PhotoBand
+        photo={photos.auditorium}
+        eyebrow="When it matters"
+        title="Built for the moments when everyone is listening."
+        body="The keynote. The board update. The negotiation that sets next year’s numbers. We prepare you for the specific moments where your English carries the weight of your work."
+      />
       <ProcessSection />
       <HumanAiSection />
       <AiPracticeSection />
@@ -133,24 +142,27 @@ export default async function HomePage() {
               </ButtonLink>
             </div>
           </div>
-          <div className="rounded-2xl border border-line bg-surface p-7 md:p-9">
-            <p className="text-sm font-medium text-ink">For professionals who need English for</p>
-            <ul className="mt-5 flex flex-wrap gap-2">
-              {corporateNeeds.map((n) => (
-                <li key={n} className="rounded-full border border-line px-3.5 py-1.5 text-sm text-ink-2">
-                  {n}
-                </li>
-              ))}
-            </ul>
-            <div className="mt-8 grid gap-4 border-t border-line pt-6 sm:grid-cols-2">
-              {corporate.map((p) => (
-                <div key={p.id}>
-                  <p className="font-serif text-2xl text-ink">{p.slug === "corporate-pilot" ? "Corporate Pilot" : "Annual Program"}</p>
-                  <p className="mt-1 text-sm text-muted">
-                    {p.duration} · {formatPrice(p.price).amount}
-                  </p>
-                </div>
-              ))}
+          <div className="flex flex-col">
+            <PhotoFrame photo={photos.meetingTable} sizes="(min-width: 1024px) 560px, 100vw" aspect="aspect-[16/9]" className="rounded-b-none" />
+            <div className="rounded-2xl rounded-t-none border border-t-0 border-line bg-surface p-7 md:p-9">
+              <p className="text-sm font-medium text-ink">For professionals who need English for</p>
+              <ul className="mt-5 flex flex-wrap gap-2">
+                {corporateNeeds.map((n) => (
+                  <li key={n} className="rounded-full border border-line px-3.5 py-1.5 text-sm text-ink-2">
+                    {n}
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-8 grid gap-4 border-t border-line pt-6 sm:grid-cols-2">
+                {corporate.map((p) => (
+                  <div key={p.id}>
+                    <p className="font-serif text-2xl text-ink">{p.slug === "corporate-pilot" ? "Corporate Pilot" : "Annual Program"}</p>
+                    <p className="mt-1 text-sm text-muted">
+                      {p.duration} · {p.price.display === "custom" ? "Custom pricing" : formatPrice(p.price).amount}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </Container>
@@ -200,7 +212,7 @@ export default async function HomePage() {
         </Container>
       </Section>
 
-      <CtaBand location="home_footer_cta" />
+      <CtaBand location="home_footer_cta" photo={photos.bostonDusk} />
     </>
   );
 }

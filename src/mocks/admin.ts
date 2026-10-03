@@ -60,6 +60,7 @@ export const contentItems: ContentItem[] = [
   { id: "c_contact", area: "homepage", title: "Contact email and location", location: "src/config/site.ts", status: "placeholder", owner: "Operations" },
   { id: "c_privacy", area: "legal", title: "Privacy policy reviewed by counsel", location: "src/app/(marketing)/privacy/page.tsx", status: "draft", owner: "Legal" },
   { id: "c_pricing", area: "pricing", title: "Confirm program pricing", location: "src/config/programs.ts", status: "draft", owner: "Founder" },
-  { id: "c_photo", area: "media", title: "Professional photography", location: "public/images", status: "placeholder", owner: "Marketing" },
+  { id: "c_photo", area: "media", title: "Founder portrait (professional photography)", location: "src/content/founder.ts", status: "placeholder", owner: "Marketing" },
+  { id: "c_stock", area: "media", title: "Site photography (Unsplash, credited on /credits)", location: "src/content/photos.ts", status: "verified", owner: "Marketing" },
   { id: "c_copy", area: "homepage", title: "Positioning and homepage copy", location: "src/content/marketing.ts", status: "verified", owner: "Founder" },
 ];

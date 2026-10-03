@@ -8,6 +8,8 @@ import { ctas } from "@/config/site";
 import { corporateBuyers, corporateNeeds, metricLabels } from "@/content/marketing";
 import { services } from "@/lib/services";
 import { pageMetadata, serviceJsonLd } from "@/lib/seo";
+import { PhotoFrame } from "@/components/ui/photo";
+import { photos } from "@/content/photos";
 
 const description =
   "Corporate executive communication programs for leadership teams who work in English: assessments, coaching, business-specific simulations, progress dashboards and quarterly reporting.";
@@ -36,6 +38,7 @@ export default async function CompaniesPage() {
       <JsonLd data={serviceJsonLd("Corporate executive communication program", description, "/companies")} />
       <PageHero
         eyebrow="For companies"
+        aside={<PhotoFrame photo={photos.whiteboardTeam} sizes="(min-width: 1024px) 560px, 100vw" priority />}
         title="Develop stronger English communication across your leadership team."
         lead={
           <p>

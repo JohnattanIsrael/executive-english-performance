@@ -3,6 +3,8 @@ import { CtaBand, PageHero } from "@/components/marketing/sections";
 import { Container, Section, SectionHeading } from "@/components/ui/primitives";
 import { caseStudies } from "@/content/case-studies";
 import { pageMetadata } from "@/lib/seo";
+import { PhotoFrame } from "@/components/ui/photo";
+import { photos } from "@/content/photos";
 
 export const metadata = pageMetadata({
   title: "Results & Case Studies",
@@ -32,6 +34,7 @@ export default function ResultsPage() {
     <>
       <PageHero
         eyebrow="Results"
+        aside={<PhotoFrame photo={photos.dubaiDusk} sizes="(min-width: 1024px) 560px, 100vw" priority />}
         title="Evidence, documented carefully."
         lead={
           <p>
