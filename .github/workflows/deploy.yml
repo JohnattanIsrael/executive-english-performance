@@ -40,6 +40,7 @@ jobs:
           # Optional integrations: set as repository variables (Settings → Secrets and variables → Actions → Variables).
           NEXT_PUBLIC_LEAD_WEBHOOK_URL: ${{ vars.NEXT_PUBLIC_LEAD_WEBHOOK_URL }}
           NEXT_PUBLIC_BOOKING_URL: ${{ vars.NEXT_PUBLIC_BOOKING_URL }}
+          NEXT_PUBLIC_BOOKING_EMBED_URL: ${{ vars.NEXT_PUBLIC_BOOKING_EMBED_URL }}
           NEXT_PUBLIC_ANALYTICS_PROVIDER: ${{ vars.NEXT_PUBLIC_ANALYTICS_PROVIDER || 'none' }}
           NEXT_PUBLIC_GA4_MEASUREMENT_ID: ${{ vars.NEXT_PUBLIC_GA4_MEASUREMENT_ID }}
           NEXT_PUBLIC_PLAUSIBLE_DOMAIN: ${{ vars.NEXT_PUBLIC_PLAUSIBLE_DOMAIN }}

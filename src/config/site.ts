@@ -18,7 +18,10 @@ export const site = {
     location: "[City, Country] · Working with clients internationally",
     responseTime: "We aim to respond within two business days.",
   },
+  /** Public booking page (e.g. Google Calendar appointment schedule link). */
   bookingUrl: process.env.NEXT_PUBLIC_BOOKING_URL || "",
+  /** Embeddable booking page URL, shown inline after an assessment request. */
+  bookingEmbedUrl: process.env.NEXT_PUBLIC_BOOKING_EMBED_URL || "",
   social: {
     linkedin: "",
   },

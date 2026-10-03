@@ -1,6 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
-import type { ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 
 export function SubmitRow({ submitting, label, formError }: { submitting: boolean; label: string; formError?: string }) {
@@ -43,10 +45,20 @@ export function PrivacyConsentText() {
 }
 
 export function FormSuccess({ title, children }: { title: string; children: ReactNode }) {
+  const heading = useRef<HTMLHeadingElement>(null);
+
+  // The form is replaced by this message, so bring it into view and move focus to it.
+  useEffect(() => {
+    heading.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    heading.current?.focus({ preventScroll: true });
+  }, []);
+
   return (
     <div role="status" className="rounded-2xl border border-good/25 bg-good-soft/60 p-7 md:p-9">
       <CheckCircle2 className="size-7 text-good" aria-hidden />
-      <h2 className="mt-4 font-serif text-3xl text-ink">{title}</h2>
+      <h2 ref={heading} tabIndex={-1} className="mt-4 font-serif text-3xl text-ink focus:outline-none">
+        {title}
+      </h2>
       <div className="mt-3 text-[15.5px] leading-relaxed text-ink-2">{children}</div>
     </div>
   );

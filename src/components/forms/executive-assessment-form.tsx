@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { CalendarClock } from "lucide-react";
-import { ButtonLink } from "@/components/ui/button";
+import { buttonClasses } from "@/components/ui/button";
 import { ChoiceGroup, Consent, describedBy, Field, Input, Select, Textarea } from "@/components/ui/field";
 import { site } from "@/config/site";
 import { contactMethods, englishUsageOptions } from "@/content/forms";
 import { track } from "@/lib/analytics";
 import { executiveAssessmentSchema } from "@/lib/validation/leads";
+import { BookingEmbed } from "./booking-embed";
 import { FormSuccess, Honeypot, PrivacyConsentText, SubmitRow } from "./form-parts";
 import { useLeadForm } from "./use-lead-form";
 
@@ -22,15 +23,36 @@ export function ExecutiveAssessmentForm() {
   );
 
   if (status === "success") {
+    if (site.bookingEmbedUrl) {
+      return (
+        <>
+          <FormSuccess title="Thank you. Now choose a time.">
+            <p>
+              Your request is in. Pick a time below for your executive assessment — it goes straight into our calendar.
+              Prefer us to propose a time? Skip this step and we’ll contact you. {site.contact.responseTime}
+            </p>
+          </FormSuccess>
+          <BookingEmbed src={site.bookingEmbedUrl} link={site.bookingUrl || site.bookingEmbedUrl} />
+        </>
+      );
+    }
     return (
       <FormSuccess title="Thank you. Your request is in.">
         <p>
           We’ll review your situation and contact you to arrange your executive assessment. {site.contact.responseTime}
         </p>
         {site.bookingUrl ? (
-          <ButtonLink href={site.bookingUrl} className="mt-6">
+          <a
+            href={site.bookingUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={buttonClasses("primary", "md", "mt-6")}
+            onClick={() =>
+              track("cta_clicked", { label: "Choose a time now", location: "assessment_success", href: site.bookingUrl })
+            }
+          >
             <CalendarClock className="size-4" aria-hidden /> Choose a time now
-          </ButtonLink>
+          </a>
         ) : (
           <p className="mt-4">
             While you wait, you can take the{" "}

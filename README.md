@@ -93,6 +93,11 @@ estimated deal value, stage, proposal & customer status). Pipeline:
   (reply-to), so notification emails read well. Any JSON endpoint works instead —
   Zapier/Make, a CRM or your own API — by changing that variable and re-running the deploy.
 - A hidden honeypot field (`_gotcha`) silently drops bot submissions.
+- **Scheduling is configured with a Google Calendar appointment schedule.** After an
+  Executive Assessment request, the booking page appears inline
+  (`NEXT_PUBLIC_BOOKING_EMBED_URL`, the `…/appointments/schedules/<id>?gv=true` URL) with
+  a fallback link (`NEXT_PUBLIC_BOOKING_URL`). Bookings land directly in Google Calendar;
+  they happen inside Google's frame, so the site's analytics can't see them.
 - A copy is kept in the visitor's browser so the demo `/admin` pipeline shows submissions
   made on the same device. **Without the variable, leads are not delivered anywhere.**
 
