@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+ * Design tokens
+ * Paper & ink neutrals, a slate "harbor" blue for data and focus, and brass
+ * reserved for fine editorial detail. Intentionally restrained.
+ * ------------------------------------------------------------------------- */
+@theme {
+  --color-paper: #f6f4ef;
+  --color-paper-2: #efebe3;
+  --color-surface: #ffffff;
+  --color-ink: #0e1726;
+  --color-ink-2: #2b3445;
+  --color-muted: #5c6270;
+  --color-faint: #8a8f99;
+  --color-line: #e3dfd6;
+  --color-line-strong: #cfc8ba;
+
+  --color-brass: #8a6634;
+  --color-brass-light: #c9a876;
+
+  --color-harbor-50: #eef3f8;
+  --color-harbor-100: #dce6f0;
+  --color-harbor-200: #b9cce0;
+  --color-harbor-300: #8faecb;
+  --color-harbor-400: #5f8ab2;
+  --color-harbor-500: #3d6c98;
+  --color-harbor-600: #2b577f;
+  --color-harbor-700: #224566;
+  --color-harbor-800: #1a3550;
+  --color-harbor-900: #12253a;
+
+  /* Single-series data color (validated: lightness band, chroma floor, ≥3:1 on white)
+     and the lighter step of the same ramp for meter tracks. */
+  --color-data: #2f6aa8;
+  --color-data-track: #dbe6f3;
+  --color-data-soft: #a9c3e2;
+
+  --color-good: #2f6f52;
+  --color-good-soft: #e3efe8;
+  --color-caution: #8c5a12;
+  --color-caution-soft: #f6ecd9;
+  --color-critical: #a63a32;
+
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-newsreader), ui-serif, Georgia, serif;
+
+  --animate-rise: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-harbor-200);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-harbor-500);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@layer components {
+  .eyebrow {
+    @apply text-xs font-medium tracking-[0.18em] text-brass uppercase;
+  }
+  .display {
+    @apply font-serif font-normal tracking-[-0.02em] text-balance;
+  }
+  .prose-lead {
+    @apply text-lg leading-relaxed text-ink-2 md:text-xl;
+  }
+  .hairline-grid {
+    background-image:
+      linear-gradient(to right, rgb(14 23 38 / 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(14 23 38 / 0.05) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+  .hairline-grid-inverse {
+    background-image:
+      linear-gradient(to right, rgb(246 244 239 / 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(246 244 239 / 0.06) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
