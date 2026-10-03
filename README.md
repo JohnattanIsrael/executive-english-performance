@@ -87,10 +87,14 @@ Forms produce a CRM-ready `Lead` (segment, source/UTM, company, role, challenge,
 estimated deal value, stage, proposal & customer status). Pipeline:
 `New Lead → Qualified → Assessment → Proposal → Won → Active → Renewal`.
 
-- Set `NEXT_PUBLIC_LEAD_WEBHOOK_URL` to POST every lead as JSON to Formspree, Zapier/Make,
-  HubSpot/Pipedrive middleware or your own API.
+- **Delivery is configured with Formspree.** The repository variable
+  `NEXT_PUBLIC_LEAD_WEBHOOK_URL` holds the form endpoint; every submission is POSTed as flat,
+  human-readable JSON (`src/lib/crm/webhook.ts`) with `_subject`, `name` and `email`
+  (reply-to), so notification emails read well. Any JSON endpoint works instead —
+  Zapier/Make, a CRM or your own API — by changing that variable and re-running the deploy.
+- A hidden honeypot field (`_gotcha`) silently drops bot submissions.
 - A copy is kept in the visitor's browser so the demo `/admin` pipeline shows submissions
-  made on the same device. **Without a webhook, leads are not delivered anywhere.**
+  made on the same device. **Without the variable, leads are not delivered anywhere.**
 
 ### Analytics
 

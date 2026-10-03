@@ -6,24 +6,11 @@ import { CalendarClock } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button";
 import { ChoiceGroup, Consent, describedBy, Field, Input, Select, Textarea } from "@/components/ui/field";
 import { site } from "@/config/site";
+import { contactMethods, englishUsageOptions } from "@/content/forms";
 import { track } from "@/lib/analytics";
 import { executiveAssessmentSchema } from "@/lib/validation/leads";
-import { FormSuccess, PrivacyConsentText, SubmitRow } from "./form-parts";
+import { FormSuccess, Honeypot, PrivacyConsentText, SubmitRow } from "./form-parts";
 import { useLeadForm } from "./use-lead-form";
-
-export const englishUsageOptions = [
-  { value: "daily", label: "Daily — English is my main working language" },
-  { value: "weekly", label: "Weekly — regular meetings or calls in English" },
-  { value: "occasional", label: "Occasionally — important moments in English" },
-  { value: "preparing", label: "Preparing — my role will soon require English" },
-];
-
-const contactMethods = [
-  { value: "email", label: "Email" },
-  { value: "video", label: "Video call" },
-  { value: "phone", label: "Phone" },
-  { value: "whatsapp", label: "WhatsApp" },
-];
 
 export function ExecutiveAssessmentForm() {
   const params = useSearchParams();
@@ -60,6 +47,7 @@ export function ExecutiveAssessmentForm() {
   const e = errors;
   return (
     <form noValidate onSubmit={handleSubmit} className="flex flex-col gap-6">
+      <Honeypot />
       <input type="hidden" name="program" value={program} />
       <div className="grid gap-6 sm:grid-cols-2">
         <Field id="name" label="Name" required error={e.name}>

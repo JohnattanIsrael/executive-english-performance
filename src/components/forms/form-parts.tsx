@@ -18,6 +18,18 @@ export function SubmitRow({ submitting, label, formError }: { submitting: boolea
   );
 }
 
+/** Spam trap: invisible to people and assistive tech, often filled by bots. Checked in useLeadForm. */
+export function Honeypot() {
+  return (
+    <div aria-hidden="true" className="absolute -left-[10000px] h-px w-px overflow-hidden">
+      <label>
+        Leave this field empty
+        <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" />
+      </label>
+    </div>
+  );
+}
+
 export function PrivacyConsentText() {
   return (
     <>

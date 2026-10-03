@@ -5,7 +5,7 @@ import { Consent, describedBy, Field, Input, Select, Textarea } from "@/componen
 import { site } from "@/config/site";
 import { track } from "@/lib/analytics";
 import { corporateInquirySchema } from "@/lib/validation/leads";
-import { FormSuccess, PrivacyConsentText, SubmitRow } from "./form-parts";
+import { FormSuccess, Honeypot, PrivacyConsentText, SubmitRow } from "./form-parts";
 import { useLeadForm } from "./use-lead-form";
 
 const employeeCounts = ["1–50", "51–200", "201–1,000", "1,001–5,000", "5,000+"];
@@ -51,6 +51,7 @@ export function CorporateInquiryForm() {
 
   return (
     <form noValidate onSubmit={handleSubmit} className="flex flex-col gap-6">
+      <Honeypot />
       <input type="hidden" name="program" value={program} />
       <div className="grid gap-6 sm:grid-cols-2">
         <Field id="company" label="Company" required error={e.company}>

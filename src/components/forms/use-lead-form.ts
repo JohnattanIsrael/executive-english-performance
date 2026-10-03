@@ -21,7 +21,15 @@ export function useLeadForm<S extends z.ZodType>(kind: LeadKind, schema: S, onSu
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
-    const result = validateForm(schema, new FormData(form));
+    const formData = new FormData(form);
+
+    // Honeypot filled → almost certainly a bot. Show success, send nothing.
+    if (formData.get("_gotcha")) {
+      setStatus("success");
+      return;
+    }
+
+    const result = validateForm(schema, formData);
 
     if (!result.success) {
       setErrors(result.errors);

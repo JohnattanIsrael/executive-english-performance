@@ -4,7 +4,7 @@ import { Consent, describedBy, Field, Input, Select, Textarea } from "@/componen
 import { site } from "@/config/site";
 import { track } from "@/lib/analytics";
 import { contactSchema, earlyAccessSchema } from "@/lib/validation/leads";
-import { FormSuccess, PrivacyConsentText, SubmitRow } from "./form-parts";
+import { FormSuccess, Honeypot, PrivacyConsentText, SubmitRow } from "./form-parts";
 import { useLeadForm } from "./use-lead-form";
 
 export function EarlyAccessForm({ location }: { location: string }) {
@@ -22,6 +22,7 @@ export function EarlyAccessForm({ location }: { location: string }) {
 
   return (
     <form noValidate onSubmit={handleSubmit} className="flex flex-col gap-5">
+      <Honeypot />
       <div className="grid gap-5 sm:grid-cols-2">
         <Field id="ea-name" label="Name" required error={e.name}>
           <Input id="ea-name" name="name" autoComplete="name" {...describedBy("ea-name", { error: e.name })} />
@@ -63,6 +64,7 @@ export function ContactForm() {
 
   return (
     <form noValidate onSubmit={handleSubmit} className="flex flex-col gap-6">
+      <Honeypot />
       <div className="grid gap-6 sm:grid-cols-2">
         <Field id="c-name" label="Name" required error={e.name}>
           <Input id="c-name" name="name" autoComplete="name" {...describedBy("c-name", { error: e.name })} />

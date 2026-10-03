@@ -1,4 +1,5 @@
 import { sampleLeads } from "@/mocks/admin";
+import { toWebhookPayload } from "@/lib/crm/webhook";
 import type { Lead } from "@/lib/types";
 import { storage } from "@/lib/utils";
 import type { LeadService } from "../contracts";
@@ -8,8 +9,8 @@ const webhookUrl = process.env.NEXT_PUBLIC_LEAD_WEBHOOK_URL || "";
 
 /**
  * Lead capture that works on static hosting:
- *  - If NEXT_PUBLIC_LEAD_WEBHOOK_URL is set, the CRM-ready lead is POSTed as JSON
- *    (Formspree, Zapier/Make, HubSpot middleware, or your own API).
+ *  - If NEXT_PUBLIC_LEAD_WEBHOOK_URL is set, the lead is POSTed as flat, readable
+ *    JSON (see toWebhookPayload) to Formspree, Zapier/Make, a CRM or your own API.
  *  - A copy is always kept in this browser so the demo /admin pipeline shows it.
  */
 export const leadService: LeadService = {
@@ -19,7 +20,7 @@ export const leadService: LeadService = {
         const res = await fetch(webhookUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify(lead),
+          body: JSON.stringify(toWebhookPayload(lead)),
         });
         if (!res.ok) return { ok: false, error: "We couldn't send your request. Please try again or email us directly." };
       } catch {
