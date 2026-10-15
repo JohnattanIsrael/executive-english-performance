@@ -7,6 +7,8 @@
  * People shown are illustrative — never present them as clients, coaches or
  * the founder. Credits are listed on /credits.
  */
+import type { Locale } from "@/i18n/config";
+
 export interface Photo {
   slug: string;
   alt: string;
@@ -126,3 +128,26 @@ export const photos = {
     sourceUrl: "https://unsplash.com/photos/PP6RfwcCXnA",
   }),
 } satisfies Record<string, Photo>;
+
+/** Alt text in other languages, keyed by photo slug (spec 001, FR-7). */
+const altTranslations: Record<Exclude<Locale, "en">, Record<string, string>> = {
+  es: {
+    "glass-facade": "Fachada de cristal de un edificio de oficinas moderno al atardecer",
+    "auditorium-wide": "Un orador en el escenario se dirige a un gran público en un auditorio a oscuras",
+    "meeting-table": "Una persona dirige una reunión con colegas alrededor de una mesa",
+    "boston-dusk": "Horizonte de una ciudad iluminado al atardecer sobre el agua",
+    "presenting-leadership": "Una ejecutiva presenta conclusiones a su equipo en una pantalla digital",
+    "whiteboard-team": "Un equipo conversa sobre estrategia frente a una pizarra en una oficina moderna",
+    "pen-notebook": "Un bolígrafo sobre un cuaderno abierto en un escritorio",
+    handshake: "Dos profesionales de traje oscuro se dan la mano",
+    "studio-microphone": "Un micrófono de estudio con luz tenue y cálida",
+    "glass-clouds": "Fachada en blanco y negro de un edificio de cristal que refleja las nubes",
+    "dubai-dusk": "El horizonte de una ciudad al atardecer bajo un cielo naranja",
+    "notebook-pens": "Un cuaderno abierto y bolígrafos sobre un escritorio oscuro",
+    "tokyo-glass": "Edificios de oficinas de cristal frente a un cielo nublado",
+  },
+};
+
+export function photoAlt(photo: Photo, locale: Locale) {
+  return locale === "en" ? photo.alt : (altTranslations[locale][photo.slug] ?? photo.alt);
+}

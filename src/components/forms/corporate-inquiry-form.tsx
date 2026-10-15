@@ -2,34 +2,40 @@
 
 import { useSearchParams } from "next/navigation";
 import { Consent, describedBy, Field, Input, Select, Textarea } from "@/components/ui/field";
-import { site } from "@/config/site";
+import { formOptions, type Option } from "@/content/forms";
+import { commonCopy } from "@/content/i18n/common";
+import { formCopy } from "@/content/i18n/forms";
+import { useLocale } from "@/i18n/locale-provider";
 import { track } from "@/lib/analytics";
-import { corporateInquirySchema } from "@/lib/validation/leads";
+import { leadSchemas } from "@/lib/validation/leads";
 import { FormSuccess, Honeypot, PrivacyConsentText, SubmitRow } from "./form-parts";
 import { useLeadForm } from "./use-lead-form";
 
-const employeeCounts = ["1–50", "51–200", "201–1,000", "1,001–5,000", "5,000+"];
-const leaderCounts = [
-  { value: "1-10", label: "1–10" },
-  { value: "11-25", label: "11–25" },
-  { value: "26-50", label: "26–50" },
-  { value: "50+", label: "More than 50" },
-];
-const trainingOptions = [
-  "None at the moment",
-  "In-house English classes",
-  "External language provider",
-  "Language app or platform",
-  "Mixed / varies by team",
-];
-const startOptions = ["As soon as possible", "Within 1 month", "In 1–3 months", "In 3–6 months", "Exploring options"];
+function Options({ placeholder, options }: { placeholder: string; options: Option[] }) {
+  return (
+    <>
+      <option value="" disabled>
+        {placeholder}
+      </option>
+      {options.map((o) => (
+        <option key={o.value} value={o.value}>
+          {o.label}
+        </option>
+      ))}
+    </>
+  );
+}
 
 export function CorporateInquiryForm() {
   const params = useSearchParams();
   const program = params.get("program") ?? "";
+  const locale = useLocale();
+  const t = formCopy[locale].corporate;
+  const common = commonCopy[locale];
+  const options = formOptions[locale];
   const { errors: e, handleSubmit, status, submitting, formError } = useLeadForm(
     "corporate_inquiry",
-    corporateInquirySchema,
+    leadSchemas(locale).corporateInquiry,
     (data) =>
       track("corporate_inquiry_submitted", {
         employeeCount: data.employeeCount,
@@ -40,10 +46,9 @@ export function CorporateInquiryForm() {
 
   if (status === "success") {
     return (
-      <FormSuccess title="Thank you. We’ll be in touch.">
+      <FormSuccess title={t.successTitle}>
         <p>
-          We’ll review your team’s situation and propose a short discovery conversation to scope a pilot or program.{" "}
-          {site.contact.responseTime}
+          {t.successBody} {common.site.responseTime}
         </p>
       </FormSuccess>
     );
@@ -54,74 +59,46 @@ export function CorporateInquiryForm() {
       <Honeypot />
       <input type="hidden" name="program" value={program} />
       <div className="grid gap-6 sm:grid-cols-2">
-        <Field id="company" label="Company" required error={e.company}>
+        <Field id="company" label={t.company} required error={e.company}>
           <Input id="company" name="company" autoComplete="organization" {...describedBy("company", { error: e.company })} />
         </Field>
-        <Field id="name" label="Name" required error={e.name}>
+        <Field id="name" label={t.name} required error={e.name}>
           <Input id="name" name="name" autoComplete="name" {...describedBy("name", { error: e.name })} />
         </Field>
-        <Field id="position" label="Position" required error={e.position}>
+        <Field id="position" label={t.position} required error={e.position}>
           <Input id="position" name="position" autoComplete="organization-title" {...describedBy("position", { error: e.position })} />
         </Field>
-        <Field id="email" label="Work email" required error={e.email}>
+        <Field id="email" label={t.email} required error={e.email}>
           <Input id="email" name="email" type="email" autoComplete="email" {...describedBy("email", { error: e.email })} />
         </Field>
-        <Field id="employeeCount" label="Number of employees" required error={e.employeeCount}>
+        <Field id="employeeCount" label={t.employeeCount} required error={e.employeeCount}>
           <Select id="employeeCount" name="employeeCount" defaultValue="" {...describedBy("employeeCount", { error: e.employeeCount })}>
-            <option value="" disabled>
-              Select a range
-            </option>
-            {employeeCounts.map((o) => (
-              <option key={o}>{o}</option>
-            ))}
+            <Options placeholder={common.forms.selectRange} options={options.employeeCounts} />
           </Select>
         </Field>
-        <Field id="leaderCount" label="Number of executives/managers to include" required error={e.leaderCount}>
+        <Field id="leaderCount" label={t.leaderCount} required error={e.leaderCount}>
           <Select id="leaderCount" name="leaderCount" defaultValue="" {...describedBy("leaderCount", { error: e.leaderCount })}>
-            <option value="" disabled>
-              Select a range
-            </option>
-            {leaderCounts.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
+            <Options placeholder={common.forms.selectRange} options={options.leaderCounts} />
           </Select>
         </Field>
-        <Field id="currentTraining" label="Current English training" required error={e.currentTraining}>
+        <Field id="currentTraining" label={t.currentTraining} required error={e.currentTraining}>
           <Select id="currentTraining" name="currentTraining" defaultValue="" {...describedBy("currentTraining", { error: e.currentTraining })}>
-            <option value="" disabled>
-              Select one
-            </option>
-            {trainingOptions.map((o) => (
-              <option key={o}>{o}</option>
-            ))}
+            <Options placeholder={common.forms.selectOne} options={options.currentTraining} />
           </Select>
         </Field>
-        <Field id="startDate" label="Desired start date" required error={e.startDate}>
+        <Field id="startDate" label={t.startDate} required error={e.startDate}>
           <Select id="startDate" name="startDate" defaultValue="" {...describedBy("startDate", { error: e.startDate })}>
-            <option value="" disabled>
-              Select one
-            </option>
-            {startOptions.map((o) => (
-              <option key={o}>{o}</option>
-            ))}
+            <Options placeholder={common.forms.selectOne} options={options.startDate} />
           </Select>
         </Field>
       </div>
-      <Field
-        id="businessChallenge"
-        label="Main business challenge"
-        hint="Where does English communication affect results today? E.g. reporting to headquarters, client negotiations, sales presentations."
-        required
-        error={e.businessChallenge}
-      >
+      <Field id="businessChallenge" label={t.businessChallenge} hint={t.businessChallengeHint} required error={e.businessChallenge}>
         <Textarea id="businessChallenge" name="businessChallenge" {...describedBy("businessChallenge", { hint: true, error: e.businessChallenge })} />
       </Field>
       <Consent error={e.consent}>
         <PrivacyConsentText />
       </Consent>
-      <SubmitRow submitting={submitting} label="Request a Corporate Proposal" formError={formError} />
+      <SubmitRow submitting={submitting} label={t.submit} formError={formError} />
     </form>
   );
 }

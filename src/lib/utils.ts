@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import type { Locale, Localized } from "@/i18n/config";
 import type { PriceSpec } from "@/lib/types";
 
 export function cn(...inputs: ClassValue[]) {
@@ -14,25 +15,41 @@ export function asset(path: string) {
 }
 
 const usd = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+const plain = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 });
 
 export function formatCurrency(value: number) {
   return usd.format(value);
 }
 
-export function formatPrice(price: PriceSpec): { amount: string; period?: string } {
+const priceWords: Localized<{ from: string; custom: string; soon: string; periods: Record<string, string> }> = {
+  en: { from: "From", custom: "Custom pricing", soon: "Coming soon", periods: {} },
+  es: { from: "Desde", custom: "Precio a medida", soon: "Próximamente", periods: { year: "año", month: "mes" } },
+};
+
+/**
+ * Display price for a program. English: "$2,500–$5,000"; Spanish (spec 001,
+ * FR-10) keeps USD explicit: "USD 2,500–5,000", "Desde USD 5,000".
+ */
+export function formatPrice(price: PriceSpec, locale: Locale = "en"): { amount: string; period?: string } {
+  const words = priceWords[locale];
   const plus = price.openEnded ? "+" : "";
+  const period = price.period ? (words.periods[price.period] ?? price.period) : undefined;
+  const money = (v: number) => (locale === "en" ? formatCurrency(v) : `USD ${plain.format(v)}`);
   switch (price.display) {
     case "range":
       return {
-        amount: `${formatCurrency(price.min ?? 0)}–${formatCurrency(price.max ?? 0)}${plus}`,
-        period: price.period,
+        amount:
+          locale === "en"
+            ? `${money(price.min ?? 0)}–${money(price.max ?? 0)}${plus}`
+            : `USD ${plain.format(price.min ?? 0)}–${plain.format(price.max ?? 0)}${plus}`,
+        period,
       };
     case "from":
-      return { amount: `From ${formatCurrency(price.min ?? 0)}`, period: price.period };
+      return { amount: `${words.from} ${money(price.min ?? 0)}`, period };
     case "custom":
-      return { amount: price.label ?? "Custom pricing" };
+      return { amount: price.label ?? words.custom };
     case "soon":
-      return { amount: price.label ?? "Coming soon" };
+      return { amount: price.label ?? words.soon };
   }
 }
 

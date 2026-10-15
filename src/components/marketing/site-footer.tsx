@@ -1,33 +1,36 @@
-import Link from "next/link";
 import { ButtonLink } from "@/components/ui/button";
+import { LocaleLink } from "@/components/ui/locale-link";
 import { Container } from "@/components/ui/primitives";
-import { ctas, footerNav, site } from "@/config/site";
+import { site } from "@/config/site";
+import { commonCopy } from "@/content/i18n/common";
+import type { Locale } from "@/i18n/config";
 import { Logo } from "./logo";
 
-export function SiteFooter() {
+export function SiteFooter({ locale }: { locale: Locale }) {
+  const t = commonCopy[locale];
   return (
     <footer className="bg-ink text-paper">
       <Container className="py-16 md:py-20">
         <div className="grid gap-12 lg:grid-cols-[1.3fr_2fr]">
           <div className="max-w-sm">
             <Logo inverse />
-            <p className="mt-6 font-serif text-xl leading-snug text-paper/90">{site.primaryMessage}</p>
+            <p className="mt-6 font-serif text-xl leading-snug text-paper/90">{t.site.primaryMessage}</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <ButtonLink href={ctas.assessment.href} variant="inverse" size="sm" trackLocation="footer">
-                {ctas.assessment.label}
+              <ButtonLink href={t.ctas.assessment.href} variant="inverse" size="sm" trackLocation="footer">
+                {t.ctas.assessment.label}
               </ButtonLink>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-10 sm:grid-cols-3">
-            {footerNav.map((group) => (
+            {t.footerNav.map((group) => (
               <div key={group.title}>
                 <h2 className="text-xs font-medium tracking-[0.18em] text-brass-light uppercase">{group.title}</h2>
                 <ul className="mt-5 flex flex-col gap-3">
                   {group.items.map((item) => (
                     <li key={item.href}>
-                      <Link href={item.href} className="text-[15px] text-paper/70 transition-colors hover:text-paper">
+                      <LocaleLink href={item.href} className="text-[15px] text-paper/70 transition-colors hover:text-paper">
                         {item.label}
-                      </Link>
+                      </LocaleLink>
                     </li>
                   ))}
                 </ul>
@@ -37,19 +40,19 @@ export function SiteFooter() {
         </div>
         <div className="mt-16 flex flex-col gap-4 border-t border-paper/10 pt-8 text-sm text-paper/50 md:flex-row md:items-center md:justify-between">
           <p>
-            © {new Date().getFullYear()} {site.name}. All rights reserved.
+            © {new Date().getFullYear()} {site.name}. {t.footer.rights}
           </p>
           <div className="flex flex-wrap gap-x-6 gap-y-2">
-            <span>The AI communication platform is in development.</span>
-            <Link href="/privacy" className="hover:text-paper">
-              Privacy
-            </Link>
-            <Link href="/credits" className="hover:text-paper">
-              Photo credits
-            </Link>
-            <Link href={ctas.proposal.href} className="hover:text-paper">
-              Corporate proposals
-            </Link>
+            <span>{t.footer.platformNote}</span>
+            <LocaleLink href="/privacy" className="hover:text-paper">
+              {t.footer.privacy}
+            </LocaleLink>
+            <LocaleLink href="/credits" className="hover:text-paper">
+              {t.footer.credits}
+            </LocaleLink>
+            <LocaleLink href={t.ctas.proposal.href} className="hover:text-paper">
+              {t.footer.proposals}
+            </LocaleLink>
           </div>
         </div>
       </Container>

@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
+import { useLocale } from "@/i18n/locale-provider";
+import { localizePath } from "@/i18n/routes";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
@@ -49,7 +51,9 @@ type ButtonLinkProps = {
   onClick?: () => void;
 };
 
-export function ButtonLink({ href, children, variant = "primary", size = "md", className, trackLocation, onClick }: ButtonLinkProps) {
+/** Internal hrefs are sent to the current language's version of the page (spec 001, D5). */
+export function ButtonLink({ href: target, children, variant = "primary", size = "md", className, trackLocation, onClick }: ButtonLinkProps) {
+  const href = localizePath(target, useLocale());
   return (
     <Link
       href={href}

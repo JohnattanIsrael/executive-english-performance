@@ -1,6 +1,8 @@
 "use client";
 
 import { ExternalLink } from "lucide-react";
+import { formCopy } from "@/content/i18n/forms";
+import { useLocale } from "@/i18n/locale-provider";
 import { track } from "@/lib/analytics";
 
 /**
@@ -9,19 +11,20 @@ import { track } from "@/lib/analytics";
  * they are confirmed by the provider and land directly in the calendar.
  */
 export function BookingEmbed({ src, link }: { src: string; link?: string }) {
+  const t = formCopy[useLocale()].booking;
   return (
     <div className="mt-6">
       <div className="overflow-hidden rounded-xl border border-line bg-surface">
         <iframe
           src={src}
-          title="Choose a time for your Executive Assessment"
+          title={t.frameTitle}
           className="block h-[760px] w-full border-0 sm:h-[700px]"
           loading="lazy"
         />
       </div>
       {link && (
         <p className="mt-3 text-sm text-muted">
-          Calendar not showing?{" "}
+          {t.notShowing}{" "}
           <a
             href={link}
             target="_blank"
@@ -29,7 +32,7 @@ export function BookingEmbed({ src, link }: { src: string; link?: string }) {
             className="inline-flex items-center gap-1 font-medium text-ink underline underline-offset-2"
             onClick={() => track("cta_clicked", { label: "Open booking page", location: "assessment_success_embed", href: link })}
           >
-            Open the booking page in a new tab <ExternalLink className="size-3.5" aria-hidden />
+            {t.openInTab} <ExternalLink className="size-3.5" aria-hidden />
           </a>
         </p>
       )}

@@ -1,4 +1,5 @@
-import { assessmentQuestions, dimensionLabels, dimensionSummaries } from "@/content/assessment";
+import { assessmentQuestions, assessmentText, dimensionLabels, localizeQuestions } from "@/content/assessment";
+import type { Locale } from "@/i18n/config";
 import { demoAssessment } from "@/mocks/client";
 import type { AssessmentAnswers, AssessmentResult, ProfileDimension, ProfileDimensionKey } from "@/lib/types";
 import type { AssessmentService } from "../contracts";
@@ -22,7 +23,8 @@ const priorityScenarios: Record<string, string[]> = {
  * total to a 1–5 band around a neutral midpoint of 3. Deliberately simple and
  * transparent — it reflects how the person sees themselves, nothing more.
  */
-export function scoreSelfAssessment(answers: AssessmentAnswers): AssessmentResult {
+export function scoreSelfAssessment(answers: AssessmentAnswers, locale: Locale = "en"): AssessmentResult {
+  const text = assessmentText[locale];
   const totals = Object.fromEntries(dimensions.map((d) => [d, 0])) as Record<ProfileDimensionKey, number>;
 
   for (const question of assessmentQuestions) {
@@ -39,7 +41,7 @@ export function scoreSelfAssessment(answers: AssessmentAnswers): AssessmentResul
   const profile: ProfileDimension[] = dimensions.map((key) => {
     const band = Math.min(5, Math.max(1, Math.round(3 + totals[key] / 2))) as ProfileDimension["band"];
     const tier = band <= 2 ? "low" : band === 3 ? "mid" : "high";
-    return { key, label: dimensionLabels[key], band, summary: dimensionSummaries[key][tier] };
+    return { key, label: text.dimensionLabels[key], band, summary: text.dimensionSummaries[key][tier] };
   });
 
   const priorities = [...profile]
@@ -63,11 +65,11 @@ export function scoreSelfAssessment(answers: AssessmentAnswers): AssessmentResul
 }
 
 export const mockAssessmentService: AssessmentService = {
-  async getQuestions() {
-    return assessmentQuestions;
+  async getQuestions(locale = "en") {
+    return localizeQuestions(assessmentQuestions, locale);
   },
-  async evaluate(answers) {
-    return scoreSelfAssessment(answers);
+  async evaluate(answers, locale = "en") {
+    return scoreSelfAssessment(answers, locale);
   },
   async getLatest() {
     return demoAssessment;

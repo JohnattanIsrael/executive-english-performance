@@ -1,3 +1,4 @@
+import type { Locale, Localized } from "@/i18n/config";
 import type { AssessmentQuestion, ProfileDimensionKey } from "@/lib/types";
 
 /**
@@ -143,4 +144,163 @@ export const dimensionSummaries: Record<ProfileDimensionKey, Record<"low" | "mid
     mid: "Credible presence; build composure in high-pressure moments.",
     high: "Strong presence; polish for senior and board-level audiences.",
   },
+};
+
+/* ----------------------------------------------------------------------------
+ * Other languages (spec 001). Text only, keyed by question id and option
+ * value — weights and structure above are shared by every language.
+ * ------------------------------------------------------------------------- */
+
+type QuestionText = { prompt: string; help?: string; options: Record<string, string> };
+
+const questionTextEs: Record<string, QuestionText> = {
+  frequency: {
+    prompt: "¿Con qué frecuencia usa el inglés en el trabajo?",
+    options: {
+      daily: "Todos los días: es mi idioma principal de trabajo",
+      weekly: "Varias veces por semana",
+      monthly: "Algunas veces al mes, a menudo en momentos importantes",
+      rarely: "Poco por ahora, pero mi rol está cambiando",
+    },
+  },
+  difficult: {
+    prompt: "¿Qué situaciones le resultan más difíciles?",
+    help: "Elija hasta tres.",
+    options: {
+      presenting: "Presentar ante la alta dirección",
+      questions: "Responder preguntas inesperadas",
+      negotiating: "Negociar",
+      disagreeing: "Discrepar con diplomacia",
+      technical: "Explicar temas técnicos o complejos",
+      smalltalk: "Conversación informal y networking",
+      writing: "Redactar correos y mensajes importantes",
+      meetings: "Participar en reuniones de ritmo rápido",
+    },
+  },
+  presenting: {
+    prompt: "¿Qué tan seguro se siente al presentar en inglés?",
+    options: {
+      "1": "Lo evito siempre que puedo",
+      "2": "Puedo hacerlo, pero me preparo de más y aun así me siento expuesto",
+      "3": "Cómodo con contenido preparado",
+      "4": "Seguro, pero quiero más impacto",
+      "5": "Muy seguro: busco un acabado de nivel ejecutivo",
+    },
+  },
+  spontaneous: {
+    prompt: "¿Qué tan cómodo se siente con preguntas espontáneas?",
+    options: {
+      "1": "Me bloqueo o traduzco mentalmente",
+      "2": "Respondo, pero no como lo haría en mi idioma",
+      "3": "Normalmente bien; a veces me extiendo demasiado",
+      "4": "Cómodo; quiero respuestas más precisas",
+      "5": "Muy cómodo bajo presión",
+    },
+  },
+  vocabulary: {
+    prompt: "¿Con qué precisión puede expresar ideas de negocio con matices?",
+    options: {
+      "1": "A menudo me faltan las palabras adecuadas",
+      "2": "Me hago entender, pero suena más simple de lo que quiero decir",
+      "3": "Casi siempre con precisión, con algunos vacíos",
+      "4": "Con precisión; quiero un registro más ejecutivo",
+      "5": "Muy preciso en la mayoría de los contextos",
+    },
+  },
+  priorities: {
+    prompt: "¿Qué situaciones profesionales le importan más en este momento?",
+    help: "Elija hasta tres.",
+    options: {
+      leadership_meetings: "Reuniones de dirección y del consejo",
+      presentations: "Presentaciones y revisiones trimestrales",
+      negotiations: "Negociaciones y conversaciones de precios",
+      clients: "Relaciones con clientes internacionales",
+      interviews: "Entrevistas para puestos internacionales",
+      teams: "Liderar equipos internacionales",
+      technical: "Discusiones técnicas y revisiones de incidentes",
+      conferences: "Conferencias y networking",
+    },
+  },
+};
+
+const questionText: Record<Exclude<Locale, "en">, Record<string, QuestionText>> = { es: questionTextEs };
+
+/** The questionnaire with its text in the requested language. */
+export function localizeQuestions(questions: AssessmentQuestion[], locale: Locale): AssessmentQuestion[] {
+  if (locale === "en") return questions;
+  return questions.map((q) => {
+    const t = questionText[locale][q.id];
+    if (!t) return q;
+    return {
+      ...q,
+      prompt: t.prompt,
+      help: t.help ?? q.help,
+      options: q.options.map((o) => ({ ...o, label: t.options[o.value] ?? o.label })),
+    };
+  });
+}
+
+const dimensionLabelsEs: typeof dimensionLabels = {
+  presentation: "Comunicación en presentaciones",
+  meetings: "Comunicación en reuniones",
+  spontaneous: "Expresión espontánea",
+  vocabulary: "Vocabulario de negocios",
+  clarity: "Claridad",
+  precision: "Precisión",
+  presence: "Presencia ejecutiva",
+};
+
+const bandLabelsEs: typeof bandLabels = {
+  1: "Foco prioritario",
+  2: "En desarrollo",
+  3: "Base sólida",
+  4: "Fuerte",
+  5: "Destacado",
+};
+
+const dimensionSummariesEs: typeof dimensionSummaries = {
+  presentation: {
+    low: "La estructura y la exposición de contenido preparado son una clara oportunidad.",
+    mid: "Una base confiable; el siguiente paso es el impacto y el control de la audiencia.",
+    high: "Buena exposición; afine el enfoque ejecutivo y el manejo de preguntas.",
+  },
+  meetings: {
+    low: "Intervenir en el momento adecuado en conversaciones rápidas requiere atención.",
+    mid: "Participa bien; trabaje la influencia y el momento de intervenir.",
+    high: "Se siente cómodo en reuniones; concéntrese en dirigirlas y cerrarlas.",
+  },
+  spontaneous: {
+    low: "Los momentos sin guion son donde la práctica dará más resultados.",
+    mid: "Se desenvuelve bien; busque respuestas más breves y estructuradas.",
+    high: "Piensa con agilidad; afine la precisión bajo presión.",
+  },
+  vocabulary: {
+    low: "Ampliar el lenguaje funcional de negocios le permitirá expresar matices.",
+    mid: "Buen rango de trabajo; construya un registro más ejecutivo.",
+    high: "Rango amplio; afine la elección de palabras para el tono y la diplomacia.",
+  },
+  clarity: {
+    low: "Simplificar ideas complejas para audiencias diversas es una prioridad.",
+    mid: "Generalmente claro; ajuste la estructura y empiece por la idea principal.",
+    high: "Comunicador claro; mantenga los mensajes concisos cuando suba lo que está en juego.",
+  },
+  precision: {
+    low: "Expresar el significado exacto, sobre todo al discrepar, necesita trabajo.",
+    mid: "Normalmente preciso; refuerce el lenguaje diplomático y de negociación.",
+    high: "Preciso y con matices; concéntrese en la persuasión y el encuadre.",
+  },
+  presence: {
+    low: "Proyectar autoridad en inglés es un área clave de desarrollo.",
+    mid: "Presencia creíble; construya serenidad en los momentos de alta presión.",
+    high: "Presencia sólida; pula su comunicación para audiencias de alta dirección y consejo.",
+  },
+};
+
+export const assessmentText: Localized<{
+  dimensionLabels: typeof dimensionLabels;
+  bandLabels: typeof bandLabels;
+  dimensionSummaries: typeof dimensionSummaries;
+}> = {
+  en: { dimensionLabels, bandLabels, dimensionSummaries },
+  es: { dimensionLabels: dimensionLabelsEs, bandLabels: bandLabelsEs, dimensionSummaries: dimensionSummariesEs },
 };

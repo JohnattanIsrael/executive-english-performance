@@ -1,6 +1,7 @@
 import { programs } from "@/config/programs";
 import type { Lead, LeadKind, LeadSource, PipelineStage } from "@/lib/types";
 import { uid } from "@/lib/utils";
+import type { Locale } from "@/i18n/config";
 
 export const pipeline: { stage: PipelineStage; label: string; description: string }[] = [
   { stage: "new_lead", label: "New Lead", description: "Form submitted, not yet reviewed" },
@@ -30,7 +31,10 @@ export function estimateDealValue(kind: LeadKind, payload: Record<string, unknow
     const role = String(payload.jobTitle ?? "");
     const program = String(payload.program ?? "");
     // An explicit program choice wins; otherwise seniority suggests the advisory tier.
-    if (program === "executive-advisory" || program === "executive-performance") return midpoint(program);
+    if (program === "executive-advisory" || program === "executive-performance" || program === "executive-fast-track") {
+      return midpoint(program);
+    }
+    if (payload.englishUsage === "beginner") return midpoint("executive-fast-track");
     return midpoint(SENIOR_ROLE.test(role) ? "executive-advisory" : "executive-performance");
   }
   if (kind === "corporate_inquiry") {
@@ -43,7 +47,9 @@ export function estimateDealValue(kind: LeadKind, payload: Record<string, unknow
   return 0;
 }
 
-export function buildLead(kind: LeadKind, payload: Record<string, unknown>, source: LeadSource): Lead {
+/** `locale` is the site language the visitor used (spec 001, FR-12); it is stored in the payload. */
+export function buildLead(kind: LeadKind, data: Record<string, unknown>, source: LeadSource, locale: Locale = "en"): Lead {
+  const payload: Record<string, unknown> = { ...data, locale };
   const isCorporate = kind === "corporate_inquiry";
   const str = (key: string) => (typeof payload[key] === "string" ? (payload[key] as string) : undefined);
   return {

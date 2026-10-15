@@ -4,8 +4,8 @@
  * consistent schema.
  */
 export interface AnalyticsEvents {
-  landing_page_view: { path: string };
-  pricing_viewed: { path: string };
+  landing_page_view: { path: string; locale: string };
+  pricing_viewed: { path: string; locale: string };
   pricing_tier_clicked: { tier: string; audience: "b2c" | "b2b"; location: string };
   assessment_started: { context: "public" | "dashboard" };
   assessment_completed: { context: "public" | "dashboard"; priorities: string };

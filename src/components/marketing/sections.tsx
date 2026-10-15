@@ -3,17 +3,11 @@ import type { ReactNode } from "react";
 import { ButtonLink } from "@/components/ui/button";
 import { Photo } from "@/components/ui/photo";
 import { Badge, Container, Section, SectionHeading } from "@/components/ui/primitives";
+import { commonCopy } from "@/content/i18n/common";
+import { sectionCopy } from "@/content/i18n/sections";
+import { marketingContent } from "@/content/marketing";
 import type { Photo as PhotoData } from "@/content/photos";
-import { ctas } from "@/config/site";
-import {
-  comparison,
-  feedbackAreas,
-  humanAiModel,
-  journey,
-  practiceSituations,
-  pressureSituations,
-  processSteps,
-} from "@/content/marketing";
+import type { Locale } from "@/i18n/config";
 import { cn } from "@/lib/utils";
 
 /* ----------------------------------------------------------------------------
@@ -58,33 +52,25 @@ export function PageHero({
 /* ----------------------------------------------------------------------------
  * The real problem
  * ------------------------------------------------------------------------- */
-export function ProblemSection() {
+export function ProblemSection({ locale }: { locale: Locale }) {
+  const t = sectionCopy[locale].problem;
+  const { pressureSituations } = marketingContent[locale];
   return (
     <Section tone="surface">
       <Container>
         <div className="grid gap-14 lg:grid-cols-[1fr_1.15fr]">
           <div className="lg:sticky lg:top-28 lg:self-start">
-            <SectionHeading
-              eyebrow="The real problem"
-              title="English ability isn’t the same as executive communication."
-              lead={
-                <p>
-                  Many professionals have strong English and still find that it doesn’t carry them when the stakes rise.
-                  Vocabulary is there. Grammar is fine. But when the pressure is real, the message comes out longer,
-                  softer or less precise than intended.
-                </p>
-              }
-            />
+            <SectionHeading eyebrow={t.eyebrow} title={t.title} lead={<p>{t.lead}</p>} />
             <blockquote className="mt-10 border-l-2 border-brass pl-6">
               <p className="font-serif text-2xl leading-snug text-ink">
-                The goal isn’t to make you study more English.
+                {t.quote[0]}
                 <br />
-                The goal is to make you perform better in English.
+                {t.quote[1]}
               </p>
             </blockquote>
           </div>
           <div>
-            <p className="text-sm font-medium text-muted">Where strong English is tested</p>
+            <p className="text-sm font-medium text-muted">{t.listTitle}</p>
             <ul className="mt-5 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2">
               {pressureSituations.map((s) => (
                 <li key={s.title} className="bg-surface p-6">
@@ -103,15 +89,13 @@ export function ProblemSection() {
 /* ----------------------------------------------------------------------------
  * Traditional vs Executive English Performance
  * ------------------------------------------------------------------------- */
-export function ComparisonSection({ tone = "paper" }: { tone?: "paper" | "surface" }) {
+export function ComparisonSection({ locale, tone = "paper" }: { locale: Locale; tone?: "paper" | "surface" }) {
+  const t = sectionCopy[locale].comparison;
+  const { comparison } = marketingContent[locale];
   return (
     <Section tone={tone}>
       <Container>
-        <SectionHeading
-          eyebrow="A different category"
-          title="We don’t sell hours. We develop communication performance."
-          lead="The difference is where the work starts — and how success is measured."
-        />
+        <SectionHeading eyebrow={t.eyebrow} title={t.title} lead={t.lead} />
         <div className="mt-14 grid gap-5 lg:grid-cols-[1fr_1.35fr]">
           <div className="rounded-2xl border border-line bg-surface p-7 md:p-9">
             <p className="text-sm font-medium text-muted">{comparison.traditional.label}</p>
@@ -124,10 +108,10 @@ export function ComparisonSection({ tone = "paper" }: { tone?: "paper" | "surfac
               ))}
             </ol>
             <ul className="mt-8 flex flex-col gap-3">
-              {comparison.traditional.traits.map((t) => (
-                <li key={t} className="flex gap-3 text-[15px] text-muted">
+              {comparison.traditional.traits.map((trait) => (
+                <li key={trait} className="flex gap-3 text-[15px] text-muted">
                   <Minus className="mt-1 size-4 shrink-0 text-faint" aria-hidden />
-                  {t}
+                  {trait}
                 </li>
               ))}
             </ul>
@@ -145,10 +129,10 @@ export function ComparisonSection({ tone = "paper" }: { tone?: "paper" | "surfac
                 ))}
               </ol>
               <ul className="mt-8 flex flex-col gap-3">
-                {comparison.performance.traits.map((t) => (
-                  <li key={t} className="flex gap-3 text-[15px] text-paper/80">
+                {comparison.performance.traits.map((trait) => (
+                  <li key={trait} className="flex gap-3 text-[15px] text-paper/80">
                     <Check className="mt-1 size-4 shrink-0 text-brass-light" aria-hidden />
-                    {t}
+                    {trait}
                   </li>
                 ))}
               </ul>
@@ -163,15 +147,25 @@ export function ComparisonSection({ tone = "paper" }: { tone?: "paper" | "surfac
 /* ----------------------------------------------------------------------------
  * How it works
  * ------------------------------------------------------------------------- */
-export function ProcessSection({ tone = "surface", withCta = true }: { tone?: "paper" | "surface"; withCta?: boolean }) {
+export function ProcessSection({
+  locale,
+  tone = "surface",
+  withCta = true,
+}: {
+  locale: Locale;
+  tone?: "paper" | "surface";
+  withCta?: boolean;
+}) {
+  const t = sectionCopy[locale].process;
+  const { processSteps } = marketingContent[locale];
   return (
     <Section tone={tone}>
       <Container>
         <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
-          <SectionHeading eyebrow="How it works" title="Four steps from assessment to performance." />
+          <SectionHeading eyebrow={t.eyebrow} title={t.title} />
           {withCta && (
             <ButtonLink href="/how-it-works" variant="secondary" trackLocation="process_section">
-              See the full method
+              {t.cta}
             </ButtonLink>
           )}
         </div>
@@ -184,16 +178,17 @@ export function ProcessSection({ tone = "surface", withCta = true }: { tone?: "p
             </li>
           ))}
         </ol>
-        <JourneyFlow className="mt-8" />
+        <JourneyFlow locale={locale} className="mt-8" />
       </Container>
     </Section>
   );
 }
 
-export function JourneyFlow({ className, inverse }: { className?: string; inverse?: boolean }) {
+export function JourneyFlow({ locale, className, inverse }: { locale: Locale; className?: string; inverse?: boolean }) {
+  const { journey, journeyLabel } = marketingContent[locale];
   return (
     <ol
-      aria-label="Program journey"
+      aria-label={journeyLabel}
       className={cn("flex flex-wrap items-center gap-x-2 gap-y-3 text-sm", inverse ? "text-paper/80" : "text-ink-2", className)}
     >
       {journey.map((step, i) => (
@@ -217,18 +212,20 @@ export function JourneyFlow({ className, inverse }: { className?: string; invers
 /* ----------------------------------------------------------------------------
  * Human + AI model
  * ------------------------------------------------------------------------- */
-export function HumanAiSection() {
+export function HumanAiSection({ locale }: { locale: Locale }) {
+  const t = sectionCopy[locale].humanAi;
+  const { humanAiModel } = marketingContent[locale];
   return (
     <Section tone="ink" className="relative overflow-hidden">
       <div aria-hidden className="absolute inset-0 hairline-grid-inverse [mask-image:linear-gradient(to_bottom,black,transparent)]" />
       <Container className="relative">
         <SectionHeading
           inverse
-          eyebrow="Human expertise + AI practice"
+          eyebrow={t.eyebrow}
           title={
             <>
-              AI gives you more opportunities to practice.
-              <br className="hidden md:block" /> The expert helps you become better.
+              {t.title[0]}
+              <br className="hidden md:block" /> {t.title[1]}
             </>
           }
         />
@@ -250,9 +247,7 @@ export function HumanAiSection() {
             </li>
           ))}
         </ol>
-        <p className="mt-12 max-w-2xl text-lg leading-relaxed text-paper/75">
-          AI makes high-quality practice available anytime. Expert coaching makes that practice meaningful.
-        </p>
+        <p className="mt-12 max-w-2xl text-lg leading-relaxed text-paper/75">{t.closing}</p>
       </Container>
     </Section>
   );
@@ -261,38 +256,30 @@ export function HumanAiSection() {
 /* ----------------------------------------------------------------------------
  * AI practice — coming soon
  * ------------------------------------------------------------------------- */
-export function AiPracticeSection({ showCta = true }: { showCta?: boolean }) {
+export function AiPracticeSection({ locale, showCta = true }: { locale: Locale; showCta?: boolean }) {
+  const t = sectionCopy[locale].aiPractice;
+  const { practiceSituations, feedbackAreas } = marketingContent[locale];
   return (
     <Section tone="paper">
       <Container>
         <div className="grid gap-14 lg:grid-cols-[1fr_1fr]">
           <div>
-            <Badge tone="brass">Coming soon · Executive Communication Coach</Badge>
-            <SectionHeading
-              className="mt-6"
-              title="Practice the situations that actually matter."
-              lead={
-                <p>
-                  Our AI-powered communication platform is currently being developed. It will simulate realistic
-                  professional conversations and give immediate feedback — then share what it learns with your coach, so
-                  every session starts from evidence.
-                </p>
-              }
-            />
+            <Badge tone="brass">{t.badge}</Badge>
+            <SectionHeading className="mt-6" title={t.title} lead={<p>{t.lead}</p>} />
             {showCta && (
               <div className="mt-9 flex flex-wrap gap-3">
-                <ButtonLink href={ctas.earlyAccess.href} trackLocation="ai_section">
-                  Join the Early Access List
+                <ButtonLink href={commonCopy[locale].ctas.earlyAccess.href} trackLocation="ai_section">
+                  {t.join}
                 </ButtonLink>
                 <ButtonLink href="/ai-coach" variant="secondary" trackLocation="ai_section">
-                  About the AI coach
+                  {t.about}
                 </ButtonLink>
               </div>
             )}
           </div>
           <div className="grid gap-5 sm:grid-cols-2">
             <div className="rounded-2xl border border-line bg-surface p-6">
-              <p className="text-sm font-medium text-ink">You’ll practice</p>
+              <p className="text-sm font-medium text-ink">{t.practice}</p>
               <ul className="mt-4 flex flex-col gap-2.5">
                 {practiceSituations.map((s) => (
                   <li key={s.label} className="flex items-center gap-2.5 text-[15px] text-ink-2">
@@ -303,7 +290,7 @@ export function AiPracticeSection({ showCta = true }: { showCta?: boolean }) {
               </ul>
             </div>
             <div className="rounded-2xl border border-line bg-surface p-6">
-              <p className="text-sm font-medium text-ink">Feedback on</p>
+              <p className="text-sm font-medium text-ink">{t.feedback}</p>
               <ul className="mt-4 flex flex-col gap-2.5">
                 {feedbackAreas.map((s) => (
                   <li key={s} className="flex items-center gap-2.5 text-[15px] text-ink-2">
@@ -312,11 +299,50 @@ export function AiPracticeSection({ showCta = true }: { showCta?: boolean }) {
                   </li>
                 ))}
               </ul>
-              <p className="mt-6 border-t border-line pt-4 text-[13px] leading-relaxed text-muted">
-                AI is a practice and feedback layer — not a replacement for your coach.
-              </p>
+              <p className="mt-6 border-t border-line pt-4 text-[13px] leading-relaxed text-muted">{t.note}</p>
             </div>
           </div>
+        </div>
+      </Container>
+    </Section>
+  );
+}
+
+/* ----------------------------------------------------------------------------
+ * Executive Fast Track teaser (spec 002, FR-3)
+ * ------------------------------------------------------------------------- */
+export function BeginnersSection({ locale, tone = "paper" }: { locale: Locale; tone?: "paper" | "surface" }) {
+  const t = sectionCopy[locale].beginners;
+  return (
+    <Section tone={tone} id="beginners">
+      <Container>
+        <div className="grid gap-10 rounded-3xl border border-line bg-surface p-7 md:p-12 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+          <div>
+            <SectionHeading eyebrow={t.eyebrow} title={t.title} lead={<p>{t.lead}</p>} />
+            <ul className="mt-8 flex flex-wrap gap-2">
+              {t.meta.map((m) => (
+                <li key={m} className="rounded-full border border-line-strong bg-paper px-3.5 py-1.5 text-sm text-ink-2">
+                  {m}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-9 flex flex-wrap gap-3">
+              <ButtonLink href="/beginners" trackLocation="beginners_section">
+                {t.cta} <ArrowRight className="size-4" aria-hidden />
+              </ButtonLink>
+              <ButtonLink href="/book?program=executive-fast-track" variant="secondary" trackLocation="beginners_section">
+                {t.apply}
+              </ButtonLink>
+            </div>
+          </div>
+          <ol className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line">
+            {t.points.map((p, i) => (
+              <li key={p} className="flex items-start gap-4 bg-paper p-5">
+                <span className="font-serif text-2xl leading-none text-brass">{i + 1}</span>
+                <span className="text-[15.5px] text-ink">{p}</span>
+              </li>
+            ))}
+          </ol>
         </div>
       </Container>
     </Section>
@@ -354,27 +380,34 @@ export function PhotoBand({
   );
 }
 
+type CtaLink = { label: string; href: string };
+
 /* ----------------------------------------------------------------------------
  * Closing call to action
  * ------------------------------------------------------------------------- */
 export function CtaBand({
-  title = "Prepare for the conversations that matter.",
-  lead = "Start with an executive assessment: a focused conversation about your role, your situations and where communication matters most.",
+  locale,
+  title,
+  lead,
   primary = "assessment",
   secondary = "proposal",
   location,
   photo,
 }: {
+  locale: Locale;
   title?: string;
   lead?: string;
-  primary?: "assessment" | "proposal";
-  secondary?: "assessment" | "proposal" | "earlyAccess" | "none";
+  /** A standard CTA, or a page-specific link. */
+  primary?: "assessment" | "proposal" | CtaLink;
+  secondary?: "assessment" | "proposal" | "earlyAccess" | "none" | CtaLink;
   location: string;
   /** Optional atmospheric background photo under an ink overlay. */
   photo?: PhotoData;
 }) {
-  const first = ctas[primary];
-  const second = secondary === "none" ? null : ctas[secondary];
+  const ctas = commonCopy[locale].ctas;
+  const defaults = sectionCopy[locale].ctaBand;
+  const first = typeof primary === "string" ? ctas[primary] : primary;
+  const second = secondary === "none" ? null : typeof secondary === "string" ? ctas[secondary] : secondary;
   return (
     <section className="bg-paper py-20 md:py-24">
       <Container>
@@ -388,8 +421,8 @@ export function CtaBand({
           <div aria-hidden className="absolute inset-0 hairline-grid-inverse [mask-image:radial-gradient(ellipse_at_top_right,black,transparent_70%)]" />
           <div className="relative grid items-end gap-10 lg:grid-cols-[1.4fr_1fr]">
             <div>
-              <h2 className="display text-4xl leading-[1.08] text-paper md:text-5xl">{title}</h2>
-              <p className="mt-5 max-w-xl text-lg leading-relaxed text-paper/70">{lead}</p>
+              <h2 className="display text-4xl leading-[1.08] text-paper md:text-5xl">{title ?? defaults.title}</h2>
+              <p className="mt-5 max-w-xl text-lg leading-relaxed text-paper/70">{lead ?? defaults.lead}</p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row lg:flex-col lg:items-end">
               <ButtonLink href={first.href} variant="inverse" size="lg" trackLocation={location}>

@@ -1,5 +1,6 @@
 import { programs } from "@/config/programs";
-import { contactMethods, englishUsageOptions } from "@/content/forms";
+import { formOptions, type Option } from "@/content/forms";
+import { localeInfo, isLocale } from "@/i18n/config";
 import type { Lead } from "@/lib/types";
 import { formatCurrency } from "@/lib/utils";
 import { pipeline } from "./pipeline";
@@ -26,11 +27,20 @@ const fieldLabels: Record<string, string> = {
   message: "Message",
 };
 
+const labelsOf = (options: Option[]) => Object.fromEntries(options.map((o) => [o.value, o.label]));
+const options = formOptions.en;
+
+/** Notifications always use English labels, whatever language the form was in. */
 const valueLabels: Record<string, Record<string, string>> = {
-  englishUsage: Object.fromEntries(englishUsageOptions.map((o) => [o.value, o.label])),
-  contactMethod: Object.fromEntries(contactMethods.map((o) => [o.value, o.label])),
+  englishUsage: labelsOf(options.englishUsage),
+  contactMethod: labelsOf(options.contactMethods),
+  employeeCount: labelsOf(options.employeeCounts),
+  leaderCount: labelsOf(options.leaderCounts),
+  currentTraining: labelsOf(options.currentTraining),
+  startDate: labelsOf(options.startDate),
+  interest: labelsOf(options.interest),
+  topic: labelsOf(options.topics),
   program: Object.fromEntries(programs.map((p) => [p.slug, p.name])),
-  interest: { personal: "My own practice", team: "My team or company", both: "Both" },
 };
 
 const kindLabels: Record<Lead["kind"], string> = {
@@ -43,7 +53,10 @@ const kindLabels: Record<Lead["kind"], string> = {
 function subject(lead: Lead) {
   const p = lead.payload;
   const who = [lead.name, lead.company].filter(Boolean).join(", ");
-  if (lead.kind === "contact") return `${kindLabels.contact}: ${String(p.topic ?? "")} — ${lead.name}`;
+  if (lead.kind === "contact") {
+    const topic = String(p.topic ?? "");
+    return `${kindLabels.contact}: ${valueLabels.topic[topic] ?? topic} — ${lead.name}`;
+  }
   return `New ${kindLabels[lead.kind]} — ${who}`;
 }
 
@@ -75,6 +88,8 @@ export function toWebhookPayload(lead: Lead): Record<string, string> {
   if (lead.source.referrer) out.Referrer = lead.source.referrer;
   for (const [k, v] of Object.entries(lead.source.utm ?? {})) if (v) out[`UTM ${k}`] = v;
   if (lead.payload.consent) out["Consent to contact"] = "Yes";
+  const locale = String(lead.payload.locale ?? "en");
+  out["Site language"] = isLocale(locale) ? localeInfo[locale].name : locale;
   out["Submitted at"] = lead.createdAt;
   out["Lead ID"] = lead.id;
   return out;

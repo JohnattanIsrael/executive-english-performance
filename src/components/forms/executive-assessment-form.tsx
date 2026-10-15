@@ -1,14 +1,17 @@
 "use client";
 
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { CalendarClock } from "lucide-react";
 import { buttonClasses } from "@/components/ui/button";
 import { ChoiceGroup, Consent, describedBy, Field, Input, Select, Textarea } from "@/components/ui/field";
+import { LocaleLink } from "@/components/ui/locale-link";
 import { site } from "@/config/site";
-import { contactMethods, englishUsageOptions } from "@/content/forms";
+import { formOptions } from "@/content/forms";
+import { commonCopy } from "@/content/i18n/common";
+import { formCopy } from "@/content/i18n/forms";
+import { useLocale } from "@/i18n/locale-provider";
 import { track } from "@/lib/analytics";
-import { executiveAssessmentSchema } from "@/lib/validation/leads";
+import { leadSchemas } from "@/lib/validation/leads";
 import { BookingEmbed } from "./booking-embed";
 import { FormSuccess, Honeypot, PrivacyConsentText, SubmitRow } from "./form-parts";
 import { useLeadForm } from "./use-lead-form";
@@ -16,9 +19,13 @@ import { useLeadForm } from "./use-lead-form";
 export function ExecutiveAssessmentForm() {
   const params = useSearchParams();
   const program = params.get("program") ?? "";
+  const locale = useLocale();
+  const t = formCopy[locale].assessment;
+  const common = commonCopy[locale];
+  const options = formOptions[locale];
   const { errors, handleSubmit, status, submitting, formError } = useLeadForm(
     "executive_assessment",
-    executiveAssessmentSchema,
+    leadSchemas(locale).executiveAssessment,
     (data) => track("consultation_booked", { program: data.program || undefined, contactMethod: data.contactMethod }),
   );
 
@@ -26,10 +33,9 @@ export function ExecutiveAssessmentForm() {
     if (site.bookingEmbedUrl) {
       return (
         <>
-          <FormSuccess title="Thank you. Now choose a time.">
+          <FormSuccess title={t.successEmbedTitle}>
             <p>
-              Your request is in. Pick a time below for your executive assessment — it goes straight into our calendar.
-              Prefer us to propose a time? Skip this step and we’ll contact you. {site.contact.responseTime}
+              {t.successEmbedBody} {common.site.responseTime}
             </p>
           </FormSuccess>
           <BookingEmbed src={site.bookingEmbedUrl} link={site.bookingUrl || site.bookingEmbedUrl} />
@@ -37,9 +43,9 @@ export function ExecutiveAssessmentForm() {
       );
     }
     return (
-      <FormSuccess title="Thank you. Your request is in.">
+      <FormSuccess title={t.successTitle}>
         <p>
-          We’ll review your situation and contact you to arrange your executive assessment. {site.contact.responseTime}
+          {t.successBody} {common.site.responseTime}
         </p>
         {site.bookingUrl ? (
           <a
@@ -51,15 +57,15 @@ export function ExecutiveAssessmentForm() {
               track("cta_clicked", { label: "Choose a time now", location: "assessment_success", href: site.bookingUrl })
             }
           >
-            <CalendarClock className="size-4" aria-hidden /> Choose a time now
+            <CalendarClock className="size-4" aria-hidden /> {t.chooseTime}
           </a>
         ) : (
           <p className="mt-4">
-            While you wait, you can take the{" "}
-            <Link href="/assessment" className="font-medium underline underline-offset-2">
-              5-minute self-assessment
-            </Link>{" "}
-            to bring to the conversation.
+            {t.whileYouWait.before}{" "}
+            <LocaleLink href="/assessment" className="font-medium underline underline-offset-2">
+              {t.whileYouWait.link}
+            </LocaleLink>{" "}
+            {t.whileYouWait.after}
           </p>
         )}
       </FormSuccess>
@@ -72,27 +78,32 @@ export function ExecutiveAssessmentForm() {
       <Honeypot />
       <input type="hidden" name="program" value={program} />
       <div className="grid gap-6 sm:grid-cols-2">
-        <Field id="name" label="Name" required error={e.name}>
+        <Field id="name" label={t.name} required error={e.name}>
           <Input id="name" name="name" autoComplete="name" {...describedBy("name", { error: e.name })} />
         </Field>
-        <Field id="email" label="Work email" required error={e.email}>
+        <Field id="email" label={t.email} required error={e.email}>
           <Input id="email" name="email" type="email" autoComplete="email" {...describedBy("email", { error: e.email })} />
         </Field>
-        <Field id="company" label="Company" required error={e.company}>
+        <Field id="company" label={t.company} required error={e.company}>
           <Input id="company" name="company" autoComplete="organization" {...describedBy("company", { error: e.company })} />
         </Field>
-        <Field id="jobTitle" label="Job title" required error={e.jobTitle}>
+        <Field id="jobTitle" label={t.jobTitle} required error={e.jobTitle}>
           <Input id="jobTitle" name="jobTitle" autoComplete="organization-title" {...describedBy("jobTitle", { error: e.jobTitle })} />
         </Field>
-        <Field id="country" label="Country" required error={e.country}>
+        <Field id="country" label={t.country} required error={e.country}>
           <Input id="country" name="country" autoComplete="country-name" {...describedBy("country", { error: e.country })} />
         </Field>
-        <Field id="englishUsage" label="Current English usage" required error={e.englishUsage}>
-          <Select id="englishUsage" name="englishUsage" defaultValue="" {...describedBy("englishUsage", { error: e.englishUsage })}>
+        <Field id="englishUsage" label={t.englishUsage} required error={e.englishUsage}>
+          <Select
+            id="englishUsage"
+            name="englishUsage"
+            defaultValue={program === "executive-fast-track" ? "beginner" : ""}
+            {...describedBy("englishUsage", { error: e.englishUsage })}
+          >
             <option value="" disabled>
-              Select one
+              {common.forms.selectOne}
             </option>
-            {englishUsageOptions.map((o) => (
+            {options.englishUsage.map((o) => (
               <option key={o.value} value={o.value}>
                 {o.label}
               </option>
@@ -100,19 +111,13 @@ export function ExecutiveAssessmentForm() {
           </Select>
         </Field>
       </div>
-      <Field
-        id="mainChallenge"
-        label="Main communication challenge"
-        hint="What makes communication in English harder than it should be today?"
-        required
-        error={e.mainChallenge}
-      >
+      <Field id="mainChallenge" label={t.mainChallenge} hint={t.mainChallengeHint} required error={e.mainChallenge}>
         <Textarea id="mainChallenge" name="mainChallenge" {...describedBy("mainChallenge", { hint: true, error: e.mainChallenge })} />
       </Field>
       <Field
         id="upcomingSituation"
-        label="Most important upcoming English situation"
-        hint="For example: a board presentation in March, a final-round interview, a contract negotiation."
+        label={t.upcomingSituation}
+        hint={t.upcomingSituationHint}
         required
         error={e.upcomingSituation}
       >
@@ -123,14 +128,21 @@ export function ExecutiveAssessmentForm() {
           {...describedBy("upcomingSituation", { hint: true, error: e.upcomingSituation })}
         />
       </Field>
-      <ChoiceGroup name="contactMethod" legend="Preferred contact method" options={contactMethods} required error={e.contactMethod} defaultValue="email" />
-      <Field id="phone" label="Phone or WhatsApp number" hint="Only needed if you prefer phone or WhatsApp." error={e.phone}>
+      <ChoiceGroup
+        name="contactMethod"
+        legend={t.contactMethod}
+        options={options.contactMethods}
+        required
+        error={e.contactMethod}
+        defaultValue="email"
+      />
+      <Field id="phone" label={t.phone} hint={t.phoneHint} error={e.phone}>
         <Input id="phone" name="phone" type="tel" autoComplete="tel" {...describedBy("phone", { hint: true, error: e.phone })} />
       </Field>
       <Consent error={e.consent}>
         <PrivacyConsentText />
       </Consent>
-      <SubmitRow submitting={submitting} label="Request my Executive Assessment" formError={formError} />
+      <SubmitRow submitting={submitting} label={t.submit} formError={formError} />
     </form>
   );
 }

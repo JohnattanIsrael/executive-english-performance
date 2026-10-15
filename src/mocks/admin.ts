@@ -57,7 +57,7 @@ export const contentItems: ContentItem[] = [
   { id: "c_case_1", area: "case_study", title: "Case study 1 — verified client data and permission", location: "src/content/case-studies.ts", status: "placeholder", owner: "Founder" },
   { id: "c_case_2", area: "case_study", title: "Case study 2 — verified client data and permission", location: "src/content/case-studies.ts", status: "placeholder", owner: "Founder" },
   { id: "c_case_3", area: "case_study", title: "Case study 3 — verified client data and permission", location: "src/content/case-studies.ts", status: "placeholder", owner: "Founder" },
-  { id: "c_contact", area: "homepage", title: "Contact email and location", location: "src/config/site.ts", status: "placeholder", owner: "Operations" },
+  { id: "c_contact", area: "homepage", title: "Contact email and location", location: "src/config/site.ts · src/content/i18n/common.ts", status: "placeholder", owner: "Operations" },
   { id: "c_privacy", area: "legal", title: "Privacy policy reviewed by counsel", location: "src/app/(marketing)/privacy/page.tsx", status: "draft", owner: "Legal" },
   { id: "c_pricing", area: "pricing", title: "Confirm program pricing", location: "src/config/programs.ts", status: "draft", owner: "Founder" },
   { id: "c_photo", area: "media", title: "Founder portrait (professional photography)", location: "src/content/founder.ts", status: "placeholder", owner: "Marketing" },

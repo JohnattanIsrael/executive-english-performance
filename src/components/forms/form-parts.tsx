@@ -1,11 +1,14 @@
 "use client";
 
-import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import { useEffect, useRef, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
+import { LocaleLink } from "@/components/ui/locale-link";
+import { commonCopy } from "@/content/i18n/common";
+import { useLocale } from "@/i18n/locale-provider";
 
 export function SubmitRow({ submitting, label, formError }: { submitting: boolean; label: string; formError?: string }) {
+  const t = commonCopy[useLocale()].forms;
   return (
     <div className="flex flex-col gap-3 pt-2">
       {formError && (
@@ -14,7 +17,7 @@ export function SubmitRow({ submitting, label, formError }: { submitting: boolea
         </p>
       )}
       <Button type="submit" size="lg" disabled={submitting} className="w-full sm:w-auto">
-        {submitting ? "Sending…" : label}
+        {submitting ? t.sending : label}
       </Button>
     </div>
   );
@@ -22,10 +25,11 @@ export function SubmitRow({ submitting, label, formError }: { submitting: boolea
 
 /** Spam trap: invisible to people and assistive tech, often filled by bots. Checked in useLeadForm. */
 export function Honeypot() {
+  const t = commonCopy[useLocale()].forms;
   return (
     <div aria-hidden="true" className="absolute -left-[10000px] h-px w-px overflow-hidden">
       <label>
-        Leave this field empty
+        {t.honeypot}
         <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" />
       </label>
     </div>
@@ -33,13 +37,14 @@ export function Honeypot() {
 }
 
 export function PrivacyConsentText() {
+  const t = commonCopy[useLocale()].forms.consent;
   return (
     <>
-      I agree to be contacted about my request. Details are handled as described in the{" "}
-      <Link href="/privacy" className="underline underline-offset-2 hover:text-ink">
-        privacy notice
-      </Link>
-      .
+      {t.before}{" "}
+      <LocaleLink href="/privacy" className="underline underline-offset-2 hover:text-ink">
+        {t.link}
+      </LocaleLink>
+      {t.after}
     </>
   );
 }

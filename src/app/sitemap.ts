@@ -1,28 +1,41 @@
 import type { MetadataRoute } from "next";
-import { absoluteUrl } from "@/lib/seo";
+import { locales } from "@/i18n/config";
+import { localizePath, type LocalizedRoute } from "@/i18n/routes";
+import { absoluteUrl, languageAlternates } from "@/lib/seo";
 
 export const dynamic = "force-static";
 
-const routes: { path: string; priority: number; changeFrequency: "weekly" | "monthly" | "yearly" }[] = [
-  { path: "/", priority: 1, changeFrequency: "weekly" },
-  { path: "/executives", priority: 0.9, changeFrequency: "monthly" },
-  { path: "/companies", priority: 0.9, changeFrequency: "monthly" },
-  { path: "/programs", priority: 0.8, changeFrequency: "monthly" },
-  { path: "/pricing", priority: 0.8, changeFrequency: "monthly" },
-  { path: "/how-it-works", priority: 0.7, changeFrequency: "monthly" },
-  { path: "/ai-coach", priority: 0.7, changeFrequency: "monthly" },
-  { path: "/assessment", priority: 0.7, changeFrequency: "monthly" },
-  { path: "/book", priority: 0.8, changeFrequency: "monthly" },
-  { path: "/proposal", priority: 0.7, changeFrequency: "monthly" },
-  { path: "/about", priority: 0.6, changeFrequency: "monthly" },
-  { path: "/results", priority: 0.5, changeFrequency: "monthly" },
-  { path: "/faq", priority: 0.6, changeFrequency: "monthly" },
-  { path: "/contact", priority: 0.5, changeFrequency: "yearly" },
-  { path: "/privacy", priority: 0.2, changeFrequency: "yearly" },
-  { path: "/credits", priority: 0.1, changeFrequency: "yearly" },
-];
+type Entry = { priority: number; changeFrequency: "weekly" | "monthly" | "yearly" };
+
+/** Every public route, in every language, with hreflang alternates (spec 001, FR-16). */
+const routes: Record<LocalizedRoute, Entry> = {
+  "/": { priority: 1, changeFrequency: "weekly" },
+  "/executives": { priority: 0.9, changeFrequency: "monthly" },
+  "/companies": { priority: 0.9, changeFrequency: "monthly" },
+  "/beginners": { priority: 0.8, changeFrequency: "monthly" },
+  "/programs": { priority: 0.8, changeFrequency: "monthly" },
+  "/pricing": { priority: 0.8, changeFrequency: "monthly" },
+  "/how-it-works": { priority: 0.7, changeFrequency: "monthly" },
+  "/ai-coach": { priority: 0.7, changeFrequency: "monthly" },
+  "/assessment": { priority: 0.7, changeFrequency: "monthly" },
+  "/book": { priority: 0.8, changeFrequency: "monthly" },
+  "/proposal": { priority: 0.7, changeFrequency: "monthly" },
+  "/about": { priority: 0.6, changeFrequency: "monthly" },
+  "/results": { priority: 0.5, changeFrequency: "monthly" },
+  "/faq": { priority: 0.6, changeFrequency: "monthly" },
+  "/contact": { priority: 0.5, changeFrequency: "yearly" },
+  "/privacy": { priority: 0.2, changeFrequency: "yearly" },
+  "/credits": { priority: 0.1, changeFrequency: "yearly" },
+};
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
-  return routes.map((r) => ({ url: absoluteUrl(r.path), lastModified, changeFrequency: r.changeFrequency, priority: r.priority }));
+  return Object.entries(routes).flatMap(([path, entry]) =>
+    locales.map((locale) => ({
+      url: absoluteUrl(localizePath(path, locale)),
+      lastModified,
+      ...entry,
+      alternates: { languages: languageAlternates(path) },
+    })),
+  );
 }

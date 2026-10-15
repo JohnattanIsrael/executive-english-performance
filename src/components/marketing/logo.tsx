@@ -1,4 +1,8 @@
-import Link from "next/link";
+"use client";
+
+import { LocaleLink } from "@/components/ui/locale-link";
+import { commonCopy } from "@/content/i18n/common";
+import { useLocale } from "@/i18n/locale-provider";
 import { cn } from "@/lib/utils";
 
 export function LogoMark({ className, inverse }: { className?: string; inverse?: boolean }) {
@@ -13,8 +17,9 @@ export function LogoMark({ className, inverse }: { className?: string; inverse?:
 }
 
 export function Logo({ inverse, className, href = "/" }: { inverse?: boolean; className?: string; href?: string }) {
+  const locale = useLocale();
   return (
-    <Link href={href} className={cn("group flex items-center gap-3", className)} aria-label="Executive English Performance — home">
+    <LocaleLink href={href} className={cn("group flex items-center gap-3", className)} aria-label={commonCopy[locale].logoLabel}>
       <LogoMark inverse={inverse} />
       <span className="flex flex-col leading-none">
         <span className={cn("font-serif text-[17px] tracking-[-0.01em]", inverse ? "text-paper" : "text-ink")}>Executive English</span>
@@ -22,6 +27,6 @@ export function Logo({ inverse, className, href = "/" }: { inverse?: boolean; cl
           Performance
         </span>
       </span>
-    </Link>
+    </LocaleLink>
   );
 }

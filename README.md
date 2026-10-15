@@ -24,13 +24,15 @@ cp .env.example .env.local   # optional
 npm run dev                  # http://localhost:3000
 npm run build                # static export to ./out
 npm run lint
+npm run verify               # spec acceptance checks against ./out (after build)
 ```
 
 ## What's included
 
 | Area | Routes |
 | --- | --- |
-| Marketing | `/` `/executives` `/companies` `/how-it-works` `/ai-coach` `/programs` `/pricing` `/about` `/results` `/faq` `/contact` `/privacy` |
+| Marketing | `/` `/executives` `/companies` `/beginners` `/how-it-works` `/ai-coach` `/programs` `/pricing` `/about` `/results` `/faq` `/contact` `/privacy` |
+| Spanish | Every marketing and conversion route under `/es/…` (e.g. `/es/pricing`) |
 | Conversion | `/book` (Executive Assessment) · `/proposal` (Corporate Proposal) · `/assessment` (self-assessment) · `/ai-coach#early-access` |
 | Client app | `/dashboard` + `profile` `assessment` `practice` `scenarios` `progress` `coaching` `messages` `settings` |
 | Company app | `/company` + `employees` `programs` `progress` `reports` `settings` |
@@ -40,6 +42,34 @@ npm run lint
 The app areas run on clearly labeled **sample data**. The practice simulation uses a
 scripted counterpart and rule-based text signals (length, softeners, fillers,
 structure) — explicitly labeled as *not* an AI evaluation.
+
+## Specs
+
+Features are built spec-first: `specs/<nnn>-<feature>/` holds `spec.md` (requirements and
+acceptance criteria), `plan.md` and `tasks.md`. See [`specs/README.md`](specs/README.md).
+`npm run verify` checks the automatable acceptance criteria on the static export; CI runs
+it on every deploy.
+
+## Languages (English / Spanish)
+
+English is served at the root, Spanish under `/es/` (spec 001). Two root layouts —
+`src/app/(main)/layout.tsx` (`lang="en"`, also the English-only app areas) and
+`src/app/es/layout.tsx` (`lang="es"`) — so each page ships with the right `<html lang>`.
+
+- **Pages** are implemented once in `src/views/` and take a `locale`; the files in
+  `src/app/(main)/(marketing)/` and `src/app/es/` are three-line wrappers.
+- **Copy** lives in `src/content/` as `{ en, es }` with `es: typeof en`, so a missing
+  Spanish key fails the build. Shared chrome is in `src/content/i18n/`, page copy in
+  `src/content/pages/`. Prices, slugs and assessment weights are not duplicated — Spanish
+  text is overlaid by slug/id (`localizeProgram`, `localizeScenario`, `localizeQuestions`).
+- **Links** stay language-neutral (`/book`): `ButtonLink` and `LocaleLink` add `/es` when
+  the target exists in Spanish (`localizedRoutes` in `src/i18n/routes.ts`).
+- **Leads** carry `locale`; form option values are identical in both languages and
+  notifications stay in English with a *Site language* field.
+- **Adding a page:** add it to `localizedRoutes`, write the view + copy, add both route
+  wrappers and a sitemap entry. **Adding a language:** add it to `src/i18n/config.ts`,
+  provide the copy (TypeScript lists what's missing), add `src/app/<locale>/`.
+- The client, company and admin app areas are English only.
 
 ## Architecture
 
@@ -52,8 +82,11 @@ src/
     forms/             Lead forms + useLeadForm (validate → build CRM lead → LeadService)
     app/               AppShell, scenario library, simulation player, pipeline board, pricing editor
     assessment/        Self-assessment flow (public + dashboard)
-  config/              site.ts (brand, nav, contact) · programs.ts (single source of all pricing)
-  content/             Marketing copy, FAQ, founder placeholders, case-study framework, assessment questions
+  config/              site.ts (brand, contact) · programs.ts (single source of all pricing)
+  content/             Copy in English and Spanish: marketing, FAQ, founder placeholders, case studies,
+                       assessment questions; i18n/ (nav, CTAs, forms) · pages/ (per-page copy)
+  i18n/                Locales, localized routes and path helpers, LocaleProvider
+  views/               Marketing page implementations, rendered by the en and es route files
   lib/
     types.ts           Domain model shared by UI and services
     services/
@@ -125,7 +158,7 @@ The `/admin/content` page lists everything. In short:
 
 - `src/content/founder.ts` — founder name, portrait, bio, credentials (all bracketed placeholders)
 - `src/content/case-studies.ts` — sample case studies → verified client data with permission
-- `src/config/site.ts` — contact email and location
+- `src/config/site.ts` — contact email; `src/content/i18n/common.ts` — location (both languages)
 - `src/config/programs.ts` — confirm pricing
 - `src/app/(marketing)/privacy/page.tsx` — have the privacy notice reviewed by counsel
 - `NEXT_PUBLIC_LEAD_WEBHOOK_URL` — connect lead delivery

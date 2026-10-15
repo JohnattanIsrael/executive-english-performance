@@ -1,4 +1,8 @@
+"use client";
+
 import type { ComponentProps, ReactNode } from "react";
+import { commonCopy } from "@/content/i18n/common";
+import { useLocale } from "@/i18n/locale-provider";
 import { cn } from "@/lib/utils";
 
 const control =
@@ -25,7 +29,7 @@ export function Field({
     <div className={cn("flex flex-col gap-1.5", className)}>
       <label htmlFor={id} className="text-sm font-medium text-ink">
         {label}
-        {required ? <span className="text-critical"> *</span> : <span className="font-normal text-faint"> (optional)</span>}
+        {required ? <span className="text-critical"> *</span> : <OptionalMark />}
       </label>
       {hint && (
         <p id={`${id}-hint`} className="-mt-0.5 text-[13px] text-muted">
@@ -135,4 +139,8 @@ export function Consent({ error, children }: { error?: string; children: ReactNo
       )}
     </div>
   );
+}
+
+function OptionalMark() {
+  return <span className="font-normal text-faint"> {commonCopy[useLocale()].forms.optional}</span>;
 }

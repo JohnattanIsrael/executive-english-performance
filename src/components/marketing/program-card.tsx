@@ -3,6 +3,8 @@
 import { Check } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button";
 import { Badge } from "@/components/ui/primitives";
+import { commonCopy } from "@/content/i18n/common";
+import { useLocale } from "@/i18n/locale-provider";
 import { track } from "@/lib/analytics";
 import type { Program } from "@/lib/types";
 import { cn, formatPrice } from "@/lib/utils";
@@ -18,7 +20,9 @@ export function ProgramCard({
   compact?: boolean;
   emphasis?: boolean;
 }) {
-  const price = formatPrice(program.price);
+  const locale = useLocale();
+  const t = commonCopy[locale].program;
+  const price = formatPrice(program.price, locale);
   const items = compact ? program.includes.slice(0, 5) : program.includes;
   const dark = emphasis;
 
@@ -33,9 +37,9 @@ export function ProgramCard({
         <span className={cn("text-xs font-medium tracking-[0.16em] uppercase", dark ? "text-brass-light" : "text-brass")}>
           {program.duration}
         </span>
-        {program.status === "coming_soon" && <Badge tone={dark ? "inverse" : "brass"}>In development</Badge>}
-        {program.featured && !dark && <Badge tone="harbor">Flagship</Badge>}
-        {program.featured && dark && <Badge tone="inverse">Flagship</Badge>}
+        {program.status === "coming_soon" && <Badge tone={dark ? "inverse" : "brass"}>{t.inDevelopment}</Badge>}
+        {program.featured && !dark && <Badge tone="harbor">{t.flagship}</Badge>}
+        {program.featured && dark && <Badge tone="inverse">{t.flagship}</Badge>}
       </div>
       <h3 className={cn("mt-4 font-serif text-[1.7rem] leading-tight", dark ? "text-paper" : "text-ink")}>{program.name}</h3>
       <p className={cn("mt-2 text-[15px] leading-relaxed", dark ? "text-paper/70" : "text-muted")}>{program.tagline}</p>
@@ -57,7 +61,7 @@ export function ProgramCard({
         ))}
         {compact && program.includes.length > items.length && (
           <li className={cn("pl-7 text-[13px]", dark ? "text-paper/55" : "text-muted")}>
-            + {program.includes.length - items.length} more included
+            {t.moreIncluded(program.includes.length - items.length)}
           </li>
         )}
       </ul>

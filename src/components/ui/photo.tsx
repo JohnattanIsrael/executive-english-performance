@@ -1,4 +1,7 @@
-import type { Photo as PhotoData } from "@/content/photos";
+"use client";
+
+import { photoAlt, type Photo as PhotoData } from "@/content/photos";
+import { useLocale } from "@/i18n/locale-provider";
 import { asset, cn } from "@/lib/utils";
 
 /**
@@ -20,6 +23,7 @@ export function Photo({
   /** Purely atmospheric images get empty alt text. */
   decorative?: boolean;
 }) {
+  const locale = useLocale();
   const src = (w: number) => asset(`/images/photos/${photo.slug}-${w}.webp`);
   const largest = photo.widths[photo.widths.length - 1];
   return (
@@ -30,7 +34,7 @@ export function Photo({
       sizes={sizes}
       width={largest}
       height={Math.round(largest / photo.ratio)}
-      alt={decorative ? "" : photo.alt}
+      alt={decorative ? "" : photoAlt(photo, locale)}
       loading={priority ? "eager" : "lazy"}
       fetchPriority={priority ? "high" : undefined}
       decoding="async"

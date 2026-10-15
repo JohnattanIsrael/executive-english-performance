@@ -1,6 +1,8 @@
 "use client";
 
 import { useId, useState } from "react";
+import { commonCopy } from "@/content/i18n/common";
+import { useLocale } from "@/i18n/locale-provider";
 import { cn } from "@/lib/utils";
 
 /**
@@ -213,8 +215,9 @@ export function BarChart({
 
 /** Five-step band indicator used by the communication profile. */
 export function BandIndicator({ band, label }: { band: number; label: string }) {
+  const locale = useLocale();
   return (
-    <div className="flex items-center gap-1" role="img" aria-label={`${label}: ${band} of 5`}>
+    <div className="flex items-center gap-1" role="img" aria-label={commonCopy[locale].bandOf(label, band)}>
       {[1, 2, 3, 4, 5].map((i) => (
         <span key={i} className={cn("h-2 w-6 rounded-full sm:w-8", i <= band ? "bg-data" : "bg-data-track")} />
       ))}

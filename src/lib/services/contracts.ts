@@ -43,6 +43,7 @@ import type {
   Session,
   UserProfile,
 } from "@/lib/types";
+import type { Locale } from "@/i18n/config";
 
 export interface AuthService {
   getSession(): Promise<Session | null>;
@@ -51,9 +52,10 @@ export interface AuthService {
 }
 
 export interface AssessmentService {
-  getQuestions(): Promise<AssessmentQuestion[]>;
+  /** Questions with their text in the given language (default English). */
+  getQuestions(locale?: Locale): Promise<AssessmentQuestion[]>;
   /** Scores a self-assessment. A future implementation may add audio/AI analysis. */
-  evaluate(answers: AssessmentAnswers): Promise<AssessmentResult>;
+  evaluate(answers: AssessmentAnswers, locale?: Locale): Promise<AssessmentResult>;
   getLatest(userId: ID): Promise<AssessmentResult | null>;
 }
 

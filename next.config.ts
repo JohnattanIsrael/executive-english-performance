@@ -15,6 +15,8 @@ const nextConfig: NextConfig = {
   basePath,
   trailingSlash: true,
   images: { unoptimized: true },
+  // One bilingual 404 for both root layouts (English and /es) — specs/001.
+  experimental: { globalNotFound: true },
 };
 
 export default nextConfig;

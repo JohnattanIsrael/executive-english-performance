@@ -44,6 +44,35 @@ export const programs: Program[] = [
     featured: true,
   },
   {
+    id: "prog_exec_fast_track",
+    slug: "executive-fast-track",
+    audience: "b2c",
+    name: "Executive Fast Track",
+    tagline: "English foundations for leaders, in an 8-week intensive.",
+    description:
+      "For executives and senior professionals whose English is still basic and who need to start working in it now. We skip the general syllabus and build only the English your own role requires — introductions, meetings, calls, emails and short updates — at a fast, coached pace.",
+    duration: "8 weeks",
+    idealFor: [
+      "Leaders starting to report to a US or European parent company",
+      "Professionals stepping into an international role or client portfolio",
+      "Executives at a beginner or elementary level (around CEFR A1–A2)",
+    ],
+    includes: [
+      "Initial level and needs assessment",
+      "Three 45-minute private sessions per week",
+      "Daily 20-minute guided practice",
+      "Your own work vocabulary and phrase bank",
+      "Meeting, call and email templates for your role",
+      "Rehearsals of your real upcoming situations",
+      "Weekly progress check-ins with your coach",
+      "Final reassessment and next-step plan",
+    ],
+    price: { display: "range", min: 1800, max: 3200, currency: "USD" },
+    priceNote: "Depends on session frequency and the situations we prepare.",
+    cta: { label: "Apply for the Fast Track", href: "/book?program=executive-fast-track" },
+    status: "available",
+  },
+  {
     id: "prog_exec_advisory",
     slug: "executive-advisory",
     audience: "b2c",
@@ -153,3 +182,6 @@ export const programs: Program[] = [
 
 export const pricingNote =
   "Pricing reflects program scope, executive involvement, coaching frequency and number of participants.";
+
+export const pricingNoteEs =
+  "El precio refleja el alcance del programa, la participación ejecutiva, la frecuencia del coaching y el número de participantes.";

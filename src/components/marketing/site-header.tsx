@@ -1,17 +1,22 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button";
+import { LocaleLink } from "@/components/ui/locale-link";
 import { Container } from "@/components/ui/primitives";
-import { ctas, mainNav } from "@/config/site";
+import { commonCopy } from "@/content/i18n/common";
+import { useLocale } from "@/i18n/locale-provider";
+import { parsePathname } from "@/i18n/routes";
 import { cn } from "@/lib/utils";
+import { LanguageSwitch } from "./language-switch";
 import { Logo } from "./logo";
 
 export function SiteHeader() {
   const pathname = usePathname();
+  const locale = useLocale();
+  const t = commonCopy[locale];
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [lastPath, setLastPath] = useState(pathname);
@@ -40,7 +45,8 @@ export function SiteHeader() {
     };
   }, [open]);
 
-  const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+  const current = parsePathname(pathname).path;
+  const isActive = (href: string) => current === href || current.startsWith(`${href}/`);
 
   return (
     <header
@@ -51,80 +57,79 @@ export function SiteHeader() {
     >
       <Container className="flex h-[72px] items-center justify-between gap-6">
         <Logo />
-        <nav aria-label="Main" className="hidden lg:block">
-          <ul className="flex items-center gap-7">
-            {mainNav.map((item) => (
+        <nav aria-label={t.header.mainNavLabel} className="hidden xl:block">
+          <ul className="flex items-center gap-6">
+            {t.mainNav.map((item) => (
               <li key={item.href}>
-                <Link
+                <LocaleLink
                   href={item.href}
                   aria-current={isActive(item.href) ? "page" : undefined}
                   className={cn(
-                    "text-[14.5px] transition-colors hover:text-ink",
+                    "text-[14.5px] whitespace-nowrap transition-colors hover:text-ink",
                     isActive(item.href) ? "text-ink" : "text-muted",
                   )}
                 >
                   {item.label}
-                </Link>
+                </LocaleLink>
               </li>
             ))}
           </ul>
         </nav>
-        <div className="hidden items-center gap-5 lg:flex">
-          <Link href="/sign-in" className="text-[14.5px] text-muted transition-colors hover:text-ink">
-            Sign in
-          </Link>
-          <ButtonLink href={ctas.assessment.href} size="sm" trackLocation="header">
-            {ctas.assessment.label}
-          </ButtonLink>
+        <div className="flex items-center gap-4">
+          <LanguageSwitch />
+          <div className="hidden items-center gap-5 xl:flex">
+            <LocaleLink href="/sign-in" className="text-[14.5px] whitespace-nowrap text-muted transition-colors hover:text-ink">
+              {t.header.signIn}
+            </LocaleLink>
+            <ButtonLink href={t.ctas.assessment.href} size="sm" trackLocation="header">
+              {t.header.cta}
+            </ButtonLink>
+          </div>
+          <button
+            type="button"
+            className="-mr-2 inline-flex size-10 items-center justify-center rounded-full text-ink xl:hidden"
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            aria-label={open ? t.header.closeMenu : t.header.openMenu}
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <X className="size-5" /> : <Menu className="size-5" />}
+          </button>
         </div>
-        <button
-          type="button"
-          className="-mr-2 inline-flex size-10 items-center justify-center rounded-full text-ink lg:hidden"
-          aria-expanded={open}
-          aria-controls="mobile-menu"
-          aria-label={open ? "Close menu" : "Open menu"}
-          onClick={() => setOpen((v) => !v)}
-        >
-          {open ? <X className="size-5" /> : <Menu className="size-5" />}
-        </button>
       </Container>
 
       {open && (
-        <div id="mobile-menu" className="h-[calc(100dvh-72px)] overflow-y-auto border-t border-line bg-paper lg:hidden">
+        <div id="mobile-menu" className="h-[calc(100dvh-72px)] overflow-y-auto border-t border-line bg-paper xl:hidden">
           <Container className="flex flex-col gap-8 py-8">
-            <nav aria-label="Mobile">
+            <nav aria-label={t.header.mobileNavLabel}>
               <ul className="flex flex-col">
-                {mainNav.map((item) => (
+                {t.mainNav.map((item) => (
                   <li key={item.href} className="border-b border-line">
-                    <Link href={item.href} className="flex items-baseline justify-between py-4">
+                    <LocaleLink href={item.href} className="flex items-baseline justify-between gap-4 py-4">
                       <span className="font-serif text-2xl text-ink">{item.label}</span>
-                      {item.description && <span className="text-sm text-muted">{item.description}</span>}
-                    </Link>
+                      {item.description && <span className="text-right text-sm text-muted">{item.description}</span>}
+                    </LocaleLink>
                   </li>
                 ))}
-                {[
-                  { label: "About", href: "/about" },
-                  { label: "FAQ", href: "/faq" },
-                  { label: "Contact", href: "/contact" },
-                ].map((item) => (
+                {t.secondaryNav.map((item) => (
                   <li key={item.href} className="border-b border-line">
-                    <Link href={item.href} className="block py-3 text-base text-ink-2">
+                    <LocaleLink href={item.href} className="block py-3 text-base text-ink-2">
                       {item.label}
-                    </Link>
+                    </LocaleLink>
                   </li>
                 ))}
               </ul>
             </nav>
             <div className="flex flex-col gap-3">
-              <ButtonLink href={ctas.assessment.href} size="lg" trackLocation="mobile_menu">
-                {ctas.assessment.label}
+              <ButtonLink href={t.ctas.assessment.href} size="lg" trackLocation="mobile_menu">
+                {t.ctas.assessment.label}
               </ButtonLink>
-              <ButtonLink href={ctas.proposal.href} size="lg" variant="secondary" trackLocation="mobile_menu">
-                {ctas.proposal.label}
+              <ButtonLink href={t.ctas.proposal.href} size="lg" variant="secondary" trackLocation="mobile_menu">
+                {t.ctas.proposal.label}
               </ButtonLink>
-              <Link href="/sign-in" className="mt-2 text-center text-sm text-muted">
-                Client sign in
-              </Link>
+              <LocaleLink href="/sign-in" className="mt-2 text-center text-sm text-muted">
+                {t.header.clientSignIn}
+              </LocaleLink>
             </div>
           </Container>
         </div>
