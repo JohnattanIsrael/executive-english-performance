@@ -13,6 +13,7 @@ const routes: Record<LocalizedRoute, Entry> = {
   "/executives": { priority: 0.9, changeFrequency: "monthly" },
   "/companies": { priority: 0.9, changeFrequency: "monthly" },
   "/beginners": { priority: 0.8, changeFrequency: "monthly" },
+  "/learn": { priority: 0.8, changeFrequency: "monthly" },
   "/programs": { priority: 0.8, changeFrequency: "monthly" },
   "/pricing": { priority: 0.8, changeFrequency: "monthly" },
   "/how-it-works": { priority: 0.7, changeFrequency: "monthly" },

@@ -57,10 +57,160 @@
       transform: translateY(0);
     }
   }
+
+  /* Lessons (spec 003) */
+  --animate-pop: pop 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+  --animate-shake: shake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-sheet: sheet 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-slide-in: slide-in 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-fade: fade 0.3s ease-out both;
+  --animate-confetti: confetti var(--confetti-duration, 2.8s) cubic-bezier(0.25, 0.4, 0.45, 1) var(--confetti-delay, 0s) both;
+  --animate-wave: wave 0.9s ease-in-out infinite;
+  --animate-orbit: orbit 14s linear infinite;
+  --animate-tile-loop: tile-loop 6s cubic-bezier(0.2, 1.3, 0.4, 1) infinite;
+  --animate-tick: tick 8s steps(8, end) infinite;
+  --animate-glow: glow 2.4s ease-in-out infinite;
+
+  @keyframes pop {
+    0% {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  @keyframes shake {
+    10%,
+    90% {
+      transform: translateX(-2px);
+    }
+    20%,
+    80% {
+      transform: translateX(4px);
+    }
+    30%,
+    50%,
+    70% {
+      transform: translateX(-7px);
+    }
+    40%,
+    60% {
+      transform: translateX(7px);
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-10px) rotate(-3deg);
+    }
+  }
+  @keyframes sheet {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  @keyframes slide-in {
+    from {
+      opacity: 0;
+      transform: translateX(28px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes confetti {
+    0% {
+      opacity: 1;
+      transform: translate3d(0, -10vh, 0) rotate(0deg);
+    }
+    100% {
+      opacity: 0;
+      transform: translate3d(var(--confetti-x, 0), 105vh, 0) rotate(var(--confetti-r, 720deg));
+    }
+  }
+  @keyframes wave {
+    0%,
+    100% {
+      transform: scaleY(0.35);
+    }
+    50% {
+      transform: scaleY(1);
+    }
+  }
+  @keyframes orbit {
+    from {
+      transform: rotate(0deg) translateX(var(--orbit-r, 64px)) rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg) translateX(var(--orbit-r, 64px)) rotate(-360deg);
+    }
+  }
+  @keyframes tile-loop {
+    0%,
+    8% {
+      opacity: 0;
+      transform: translateY(14px) scale(0.85);
+    }
+    16%,
+    86% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    94%,
+    100% {
+      opacity: 0;
+      transform: translateY(-6px) scale(0.95);
+    }
+  }
+  @keyframes tick {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes glow {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 var(--glow-color, rgb(47 106 168 / 0.35));
+    }
+    50% {
+      box-shadow: 0 0 0 10px transparent;
+    }
+  }
 }
 
 :root {
   color-scheme: light;
+}
+
+/* Score ring on the lesson results screen (used inline, outside the theme). */
+@keyframes ring {
+  from {
+    stroke-dashoffset: var(--ring-from);
+  }
+  to {
+    stroke-dashoffset: var(--ring-to);
+  }
 }
 
 html {

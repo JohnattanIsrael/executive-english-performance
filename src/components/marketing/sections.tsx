@@ -1,10 +1,12 @@
 import { ArrowRight, Check, Minus } from "lucide-react";
 import type { ReactNode } from "react";
 import { ButtonLink } from "@/components/ui/button";
+import { LocaleLink } from "@/components/ui/locale-link";
 import { Photo } from "@/components/ui/photo";
 import { Badge, Container, Section, SectionHeading } from "@/components/ui/primitives";
 import { commonCopy } from "@/content/i18n/common";
 import { sectionCopy } from "@/content/i18n/sections";
+import { lessons } from "@/content/lessons";
 import { marketingContent } from "@/content/marketing";
 import type { Photo as PhotoData } from "@/content/photos";
 import type { Locale } from "@/i18n/config";
@@ -316,33 +318,72 @@ export function BeginnersSection({ locale, tone = "paper" }: { locale: Locale; t
   return (
     <Section tone={tone} id="beginners">
       <Container>
-        <div className="grid gap-10 rounded-3xl border border-line bg-surface p-7 md:p-12 lg:grid-cols-[1.1fr_1fr] lg:items-center">
-          <div>
-            <SectionHeading eyebrow={t.eyebrow} title={t.title} lead={<p>{t.lead}</p>} />
-            <ul className="mt-8 flex flex-wrap gap-2">
+        <SectionHeading eyebrow={t.eyebrow} title={t.title} lead={<p>{t.lead}</p>} />
+        <div className="mt-14 grid gap-5 lg:grid-cols-[1.15fr_1fr]">
+          {/* Free lessons */}
+          <div className="relative flex flex-col overflow-hidden rounded-3xl border border-line bg-surface p-7 md:p-10">
+            <div aria-hidden className="absolute -top-24 -right-24 size-64 rounded-full bg-[#dbe6f3] opacity-70 blur-2xl" />
+            <p className="relative text-sm font-medium text-good">{t.free.label}</p>
+            <h3 className="relative mt-3 font-serif text-3xl text-ink">{t.free.title}</h3>
+            <p className="relative mt-3 max-w-md text-[15.5px] leading-relaxed text-muted">{t.free.body}</p>
+            <ul className="relative mt-7 grid gap-2.5 sm:grid-cols-2">
+              {lessons.map((l, i) => (
+                <li key={l.id}>
+                  <LocaleLink
+                    href={`/learn#${l.id}`}
+                    className="group flex h-full items-center gap-3 rounded-2xl border border-line bg-paper px-3.5 py-3 transition-all duration-200 hover:-translate-y-0.5 hover:border-line-strong hover:bg-surface"
+                  >
+                    <span
+                      aria-hidden
+                      className="flex size-10 shrink-0 items-center justify-center rounded-xl text-xl transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6"
+                      style={{ background: l.accent.soft }}
+                    >
+                      {l.emoji}
+                    </span>
+                    <span className="text-[14.5px] leading-snug text-ink">
+                      <span className="block text-xs text-faint">{i + 1}</span>
+                      {l.title[locale].split(":")[0]}
+                    </span>
+                  </LocaleLink>
+                </li>
+              ))}
+            </ul>
+            <div className="relative mt-auto pt-8">
+              <ButtonLink href="/learn" trackLocation="beginners_section_lessons">
+                {t.free.cta} <ArrowRight className="size-4" aria-hidden />
+              </ButtonLink>
+            </div>
+          </div>
+
+          {/* Coached */}
+          <div className="relative flex flex-col overflow-hidden rounded-3xl bg-ink p-7 text-paper md:p-10">
+            <div aria-hidden className="absolute inset-0 hairline-grid-inverse [mask-image:linear-gradient(to_bottom,black,transparent)]" />
+            <p className="relative text-sm font-medium text-brass-light">{t.coached.label}</p>
+            <h3 className="relative mt-3 font-serif text-3xl">{t.coached.title}</h3>
+            <ol className="relative mt-7 flex flex-col gap-px overflow-hidden rounded-2xl border border-paper/10 bg-paper/10">
+              {t.points.map((p, i) => (
+                <li key={p} className="flex items-start gap-4 bg-ink/95 p-4">
+                  <span className="font-serif text-xl leading-none text-brass-light">{i + 1}</span>
+                  <span className="text-[15px] text-paper/85">{p}</span>
+                </li>
+              ))}
+            </ol>
+            <ul className="relative mt-6 flex flex-wrap gap-2">
               {t.meta.map((m) => (
-                <li key={m} className="rounded-full border border-line-strong bg-paper px-3.5 py-1.5 text-sm text-ink-2">
+                <li key={m} className="rounded-full border border-paper/20 px-3 py-1 text-sm text-paper/75">
                   {m}
                 </li>
               ))}
             </ul>
-            <div className="mt-9 flex flex-wrap gap-3">
-              <ButtonLink href="/beginners" trackLocation="beginners_section">
+            <div className="relative mt-auto flex flex-wrap gap-3 pt-8">
+              <ButtonLink href="/beginners" variant="inverse" trackLocation="beginners_section">
                 {t.cta} <ArrowRight className="size-4" aria-hidden />
               </ButtonLink>
-              <ButtonLink href="/book?program=executive-fast-track" variant="secondary" trackLocation="beginners_section">
+              <ButtonLink href="/book?program=executive-fast-track" variant="inverse-outline" trackLocation="beginners_section">
                 {t.apply}
               </ButtonLink>
             </div>
           </div>
-          <ol className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line">
-            {t.points.map((p, i) => (
-              <li key={p} className="flex items-start gap-4 bg-paper p-5">
-                <span className="font-serif text-2xl leading-none text-brass">{i + 1}</span>
-                <span className="text-[15.5px] text-ink">{p}</span>
-              </li>
-            ))}
-          </ol>
         </div>
       </Container>
     </Section>

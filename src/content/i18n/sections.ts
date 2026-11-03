@@ -36,8 +36,18 @@ const en = {
   },
   beginners: {
     eyebrow: "For beginners",
-    title: "Starting out in English? Start where your work is.",
-    lead: "The Executive Fast Track is an 8-week intensive for leaders whose English is still basic. No general syllabus — only the English your role needs, practiced at a fast, coached pace.",
+    title: "New to English? You’re in the right place.",
+    lead: "You don’t need a high-stakes meeting to start. Whether English is for work, travel, studies or everyday life, begin with free interactive lessons — and add a coach when you want to go faster.",
+    free: {
+      label: "Free · Self-paced",
+      title: "Interactive lessons for beginners",
+      body: "Five short, playable lessons with pictures, audio and instant feedback. No sign-up.",
+      cta: "Start a free lesson",
+    },
+    coached: {
+      label: "Coached · 8 weeks",
+      title: "Executive Fast Track",
+    },
     points: [
       "Introduce yourself, your company and your role with confidence",
       "Follow meetings and calls — and ask for clarity when you need it",
@@ -89,8 +99,18 @@ const es: typeof en = {
   },
   beginners: {
     eyebrow: "Para principiantes",
-    title: "¿Está empezando con el inglés? Empiece por su trabajo.",
-    lead: "El Fast Track Ejecutivo es un intensivo de 8 semanas para líderes cuyo inglés todavía es básico. Sin temario general: solo el inglés que necesita su rol, practicado a un ritmo rápido y acompañado.",
+    title: "¿Empieza con el inglés? Está en el lugar correcto.",
+    lead: "No necesita una reunión decisiva para empezar. Sea para el trabajo, los viajes, los estudios o la vida diaria, comience con lecciones interactivas gratis y sume un coach cuando quiera avanzar más rápido.",
+    free: {
+      label: "Gratis · A su ritmo",
+      title: "Lecciones interactivas para principiantes",
+      body: "Cinco lecciones cortas y jugables, con imágenes, audio y corrección al instante. Sin registro.",
+      cta: "Empezar una lección gratis",
+    },
+    coached: {
+      label: "Con coach · 8 semanas",
+      title: "Fast Track Ejecutivo",
+    },
     points: [
       "Presentarse, presentar su empresa y su rol con seguridad",
       "Seguir reuniones y llamadas, y pedir aclaraciones cuando lo necesite",

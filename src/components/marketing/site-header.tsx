@@ -58,7 +58,7 @@ export function SiteHeader() {
       <Container className="flex h-[72px] items-center justify-between gap-6">
         <Logo />
         <nav aria-label={t.header.mainNavLabel} className="hidden xl:block">
-          <ul className="flex items-center gap-6">
+          <ul className="flex items-center gap-5">
             {t.mainNav.map((item) => (
               <li key={item.href}>
                 <LocaleLink
@@ -78,7 +78,8 @@ export function SiteHeader() {
         <div className="flex items-center gap-4">
           <LanguageSwitch />
           <div className="hidden items-center gap-5 xl:flex">
-            <LocaleLink href="/sign-in" className="text-[14.5px] whitespace-nowrap text-muted transition-colors hover:text-ink">
+            {/* Hidden below 2xl so the nav fits on one line at 1280px (spec 003, AC-6); it stays in the mobile menu and footer. */}
+            <LocaleLink href="/sign-in" className="hidden text-[14.5px] whitespace-nowrap text-muted transition-colors hover:text-ink 2xl:inline">
               {t.header.signIn}
             </LocaleLink>
             <ButtonLink href={t.ctas.assessment.href} size="sm" trackLocation="header">

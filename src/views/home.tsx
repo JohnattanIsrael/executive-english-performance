@@ -56,6 +56,14 @@ export async function HomePage({ locale }: { locale: Locale }) {
         <div aria-hidden className="absolute inset-0 hairline-grid [mask-image:linear-gradient(to_bottom,black_20%,transparent_90%)]" />
         <Container className="relative grid items-center gap-16 pt-14 pb-24 md:pt-20 lg:grid-cols-[1.08fr_1fr] lg:gap-12 lg:pb-32">
           <div className="animate-rise">
+            <LocaleLink
+              href="/learn"
+              className="group mb-8 inline-flex max-w-full items-center gap-3 rounded-full border border-line-strong bg-surface py-1.5 pr-4 pl-1.5 text-sm text-ink-2 shadow-[0_8px_24px_-16px_rgb(14_23_38/0.4)] transition-colors hover:border-ink"
+            >
+              <span className="rounded-full bg-good px-2.5 py-0.5 text-xs font-semibold text-white">{t.hero.beginnerPill.tag}</span>
+              <span className="truncate">{t.hero.beginnerPill.label}</span>
+              <ArrowRight className="size-4 shrink-0 transition-transform group-hover:translate-x-0.5" aria-hidden />
+            </LocaleLink>
             <p className="eyebrow mb-6">{t.hero.eyebrow}</p>
             <h1 className="display text-[2.75rem] leading-[1.02] text-ink sm:text-6xl lg:text-[3.9rem] xl:text-[4.3rem]">
               {t.hero.title[0]} <span className="text-ink-2 italic">{t.hero.title[1]}</span>
@@ -78,6 +86,8 @@ export async function HomePage({ locale }: { locale: Locale }) {
           <HeroVisual locale={locale} />
         </Container>
       </section>
+
+      <BeginnersSection locale={locale} />
 
       {/* Primary message */}
       <section className="border-y border-line bg-surface py-16 md:py-20">
@@ -110,8 +120,6 @@ export async function HomePage({ locale }: { locale: Locale }) {
           </div>
         </Container>
       </Section>
-
-      <BeginnersSection locale={locale} />
 
       {/* Companies */}
       <Section tone="surface">

@@ -16,6 +16,8 @@ export interface AnalyticsEvents {
   cta_clicked: { label: string; location: string; href: string };
   simulation_started: { scenarioId: string };
   simulation_completed: { scenarioId: string; turns: number };
+  lesson_started: { lessonId: string; locale: string };
+  lesson_completed: { lessonId: string; locale: string; score: number };
 }
 
 export type AnalyticsEventName = keyof AnalyticsEvents;

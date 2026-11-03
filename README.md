@@ -31,13 +31,22 @@ npm run verify               # spec acceptance checks against ./out (after build
 
 | Area | Routes |
 | --- | --- |
-| Marketing | `/` `/executives` `/companies` `/beginners` `/how-it-works` `/ai-coach` `/programs` `/pricing` `/about` `/results` `/faq` `/contact` `/privacy` |
+| Marketing | `/` `/executives` `/companies` `/beginners` `/learn` `/how-it-works` `/ai-coach` `/programs` `/pricing` `/about` `/results` `/faq` `/contact` `/privacy` |
 | Spanish | Every marketing and conversion route under `/es/…` (e.g. `/es/pricing`) |
 | Conversion | `/book` (Executive Assessment) · `/proposal` (Corporate Proposal) · `/assessment` (self-assessment) · `/ai-coach#early-access` |
 | Client app | `/dashboard` + `profile` `assessment` `practice` `scenarios` `progress` `coaching` `messages` `settings` |
 | Company app | `/company` + `employees` `programs` `progress` `reports` `settings` |
 | Admin | `/admin` (CRM pipeline) + `users` `coaches` `scenarios` `content` `programs` |
 | Auth | `/sign-in` (mocked; opens the demo workspace) |
+
+### Free interactive lessons (`/learn`)
+
+Five playable lessons for beginners (spec 003): greetings, numbers and time, the verb *to
+be*, colors and everyday things, and ordering at a café. Each has animated flashcards, 7–8
+exercises (multiple choice, listen-and-choose, build the sentence, match pairs, type the word,
+set the clock) and a results screen. Audio uses the browser's built-in speech synthesis;
+progress stays in `localStorage`. Lessons are plain data in `src/content/lessons.ts` — add
+one there and it appears in the library. Deep link with `/learn#<lesson-id>`.
 
 The app areas run on clearly labeled **sample data**. The practice simulation uses a
 scripted counterpart and rule-based text signals (length, softeners, fillers,
@@ -139,7 +148,7 @@ estimated deal value, stage, proposal & customer status). Pipeline:
 Events (typed in `src/lib/analytics/events.ts`): `landing_page_view`, `pricing_viewed`,
 `pricing_tier_clicked`, `assessment_started`, `assessment_completed`, `consultation_booked`,
 `corporate_inquiry_submitted`, `early_access_signup`, `contact_submitted`, `cta_clicked`,
-`simulation_started`, `simulation_completed`.
+`simulation_started`, `simulation_completed`, `lesson_started`, `lesson_completed`.
 Choose a provider with `NEXT_PUBLIC_ANALYTICS_PROVIDER` = `none | console | ga4 | plausible | posthog`.
 
 ## Photography

@@ -17,3 +17,4 @@ are checked by hand and ticked in `tasks.md`.
 | --- | --- | --- |
 | [001](001-spanish-localization/spec.md) | Spanish version of the public site | Implemented |
 | [002](002-beginners-fast-track/spec.md) | Executive Fast Track for beginners | Implemented |
+| [003](003-beginner-lessons/spec.md) | Beginner focus and free interactive lessons | Implemented |
