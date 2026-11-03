@@ -9,6 +9,7 @@ export const localizedRoutes = [
   "/executives",
   "/companies",
   "/beginners",
+  "/learn",
   "/how-it-works",
   "/ai-coach",
   "/programs",

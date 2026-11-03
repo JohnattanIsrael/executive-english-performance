@@ -7,6 +7,7 @@ import { ButtonLink } from "@/components/ui/button";
 import { LocaleLink } from "@/components/ui/locale-link";
 import { PhotoFrame } from "@/components/ui/photo";
 import { Container, JsonLd, Section, SectionHeading } from "@/components/ui/primitives";
+import { lessons } from "@/content/lessons";
 import { beginnersCopy } from "@/content/pages/beginners";
 import { photos } from "@/content/photos";
 import { localizeProgram } from "@/content/programs";
@@ -62,6 +63,44 @@ export async function BeginnersPage({ locale }: { locale: Locale }) {
           {t.hero.secondary}
         </ButtonLink>
       </PageHero>
+
+      {/* Free lessons — spec 003 */}
+      <section className="border-b border-line bg-paper py-14 md:py-16">
+        <Container className="grid gap-10 lg:grid-cols-[1fr_1.15fr] lg:items-center">
+          <div>
+            <p className="eyebrow mb-4">{t.free.eyebrow}</p>
+            <h2 className="display text-3xl leading-[1.1] text-ink md:text-[2.6rem]">{t.free.title}</h2>
+            <p className="mt-5 max-w-xl text-[15.5px] leading-relaxed text-muted">{t.free.body}</p>
+            <div className="mt-7">
+              <ButtonLink href="/learn" trackLocation="beginners_free_lessons">
+                {t.free.cta} <ArrowRight className="size-4" aria-hidden />
+              </ButtonLink>
+            </div>
+          </div>
+          <ul className="grid gap-2.5 sm:grid-cols-2">
+            {lessons.map((l, i) => (
+              <li key={l.id} className={i === 0 ? "sm:col-span-2" : undefined}>
+                <LocaleLink
+                  href={`/learn#${l.id}`}
+                  className="group flex items-center gap-4 rounded-2xl border border-line bg-surface p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_20px_40px_-28px_rgb(14_23_38/0.45)]"
+                >
+                  <span
+                    aria-hidden
+                    className="flex size-12 shrink-0 items-center justify-center rounded-xl text-2xl transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6"
+                    style={{ background: l.accent.soft }}
+                  >
+                    {l.emoji}
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-[15px] leading-snug font-medium text-ink">{l.title[locale]}</span>
+                    <span className="mt-0.5 block text-sm text-muted">{l.minutes} min</span>
+                  </span>
+                </LocaleLink>
+              </li>
+            ))}
+          </ul>
+        </Container>
+      </section>
 
       {/* Is this for you? */}
       <Section tone="surface">

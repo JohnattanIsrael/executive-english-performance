@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
- * Acceptance checks for specs/001-spanish-localization and
- * specs/002-beginners-fast-track, run against the static export in ./out.
+ * Acceptance checks for specs/001-spanish-localization,
+ * specs/002-beginners-fast-track and specs/003-beginner-lessons, run against
+ * the static export in ./out.
  *
  *   npm run build && npm run verify
  *
@@ -102,6 +103,18 @@ for (const locale of ["en", "es"]) {
   }
   const beginners = read(pagePath(locale, "/beginners")) ?? "";
   check(beginners.includes(`href="${base}${prefix}/book/?program=executive-fast-track"`), `[002 AC-4] ${locale} beginners page lacks the apply link`);
+}
+
+// Spec 003 (AC-1 is covered by the 001 loop: /learn is a localized route)
+for (const locale of ["en", "es"]) {
+  const prefix = locale === "es" ? "/es" : "";
+  const home = read(pagePath(locale, "/")) ?? "";
+  check(home.includes(`href="${base}${prefix}/learn/"`), `[003 AC-2] ${locale} homepage doesn't link to the lessons page`);
+  const learn = read(pagePath(locale, "/learn")) ?? "";
+  const ids = new Set([...learn.matchAll(/data-lesson-id="([^"]+)"/g)].map((m) => m[1]));
+  check(ids.size >= 5, `[003 AC-3] ${locale} lessons page lists ${ids.size} lessons (need ≥ 5)`);
+  const beginners = read(pagePath(locale, "/beginners")) ?? "";
+  check(beginners.includes(`href="${base}${prefix}/learn/`), `[003 AC-4] ${locale} beginners page doesn't link to the lessons page`);
 }
 
 check(existsSync(join(out, "404.html")), "[001] out/404.html missing");

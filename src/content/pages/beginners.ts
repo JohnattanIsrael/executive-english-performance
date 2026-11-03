@@ -27,6 +27,12 @@ const en = {
       { label: "Starting level", value: "Beginner–elementary" },
     ],
   },
+  free: {
+    eyebrow: "Not an executive? Start free",
+    title: "Every beginner is welcome — whatever the reason.",
+    body: "English for travel, a new job, studies or everyday life? Start with our free interactive lessons: five short, playable lessons with pictures, audio and instant feedback. No sign-up, at your own pace.",
+    cta: "Start the free lessons",
+  },
   fit: {
     eyebrow: "Is this for you?",
     title: "Built for capable leaders at the start of their English.",
@@ -134,6 +140,11 @@ const en = {
     title: "What people ask before they start.",
     items: [
       {
+        question: "I’m a beginner, but I don’t need English for work. Can I still learn with you?",
+        answer:
+          "Yes. Start with the free interactive lessons on this site — they cover greetings, numbers and time, the verb “to be”, colors and everyday things, and ordering at a café. If you’d like a coach, book an assessment and tell us your goals; we’ll recommend an honest next step.",
+      },
+      {
         question: "My English is very basic. Can I really start?",
         answer:
           "Yes. The Fast Track is designed for beginners and elementary speakers. Sessions use simple, clear English adapted to your level, and nothing assumes you already know the basics.",
@@ -193,6 +204,12 @@ const es: typeof en = {
       { label: "Práctica", value: "20 min al día" },
       { label: "Nivel inicial", value: "Principiante–elemental" },
     ],
+  },
+  free: {
+    eyebrow: "¿No es ejecutivo? Empiece gratis",
+    title: "Todos los principiantes son bienvenidos, sea cual sea el motivo.",
+    body: "¿Inglés para viajar, un trabajo nuevo, estudiar o la vida diaria? Empiece con nuestras lecciones interactivas gratis: cinco lecciones cortas y jugables, con imágenes, audio y corrección al instante. Sin registro y a su ritmo.",
+    cta: "Empezar las lecciones gratis",
   },
   fit: {
     eyebrow: "¿Es para usted?",
@@ -300,6 +317,11 @@ const es: typeof en = {
     eyebrow: "Preguntas de principiantes",
     title: "Lo que se pregunta antes de empezar.",
     items: [
+      {
+        question: "Soy principiante, pero no necesito el inglés para el trabajo. ¿Puedo aprender con ustedes?",
+        answer:
+          "Sí. Empiece con las lecciones interactivas gratis de este sitio: saludos, números y la hora, el verbo “to be”, colores y objetos cotidianos, y pedir en una cafetería. Si quiere un coach, reserve una evaluación y cuéntenos sus objetivos; le recomendaremos un siguiente paso honesto.",
+      },
       {
         question: "Mi inglés es muy básico. ¿De verdad puedo empezar?",
         answer:
